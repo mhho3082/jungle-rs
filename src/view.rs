@@ -18,8 +18,11 @@ pub fn print_board(board: &Board, border: bool, space: i32, indent: i32) {
         );
     }
     for i in 0..63 {
-        if border && i % COL_COUNT == 0 {
-            print!("{}|", " ".repeat(indent as usize));
+        if i % COL_COUNT == 0 {
+            print!("{}", " ".repeat(indent as usize));
+            if border {
+                print!("|");
+            }
         }
 
         // Find and print correct square type
