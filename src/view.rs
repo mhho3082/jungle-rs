@@ -1,11 +1,11 @@
 use crate::controller::*;
 use crate::model::*;
-use std::io;
 
 use colored::Colorize;
+use std::io;
 
 /// The main user loop
-pub fn user_loop(model: &mut Model) {
+pub fn user_2p(model: &mut Model) {
     let mut input = String::new();
 
     let mut piece: i32;
@@ -21,9 +21,6 @@ pub fn user_loop(model: &mut Model) {
             "{}'s turn! Please enter piece name.",
             if model.curr().cur_blue { "Blue" } else { "Red" }
         );
-
-        // TEMP
-        println!("{:?}", list_all_moves(model.curr()));
 
         loop {
             input.clear();
@@ -92,6 +89,83 @@ pub fn user_loop(model: &mut Model) {
                 {
                     move_to = moves[dir];
                 }
+
+                if check_move(model.curr(), piece, move_to) {
+                    make_move(model, piece, move_to);
+                    println!("Move successful!");
+                    break;
+                } else {
+                    println!("Move illegal! Please try again.");
+                }
+            } else {
+                println!("Wrong input! Please try again");
+            }
+        }
+    }
+}
+
+/// The debug version of the user loop.
+pub fn debug_2p(model: &mut Model) {
+    let mut input = String::new();
+
+    let mut piece: i32;
+    let mut move_to: i32;
+    let mut moves: [i32; 4];
+
+    loop {
+        // Print map
+        print_board(&model.curr().board, true, 1, 0, Vec::new());
+
+        // Get which piece to move
+        println!(
+            "{}'s turn! Please enter piece name.",
+            if model.curr().cur_blue { "Blue" } else { "Red" }
+        );
+
+        // TEMP
+        println!("{:?}", list_all_moves(model.curr()));
+
+        loop {
+            input.clear();
+            io::stdin().read_line(&mut input).unwrap();
+            input = input.trim().to_string();
+            if ["r", "c", "d", "w", "o", "t", "l", "e"]
+                .contains(&input.as_str())
+            {
+                piece = ["r", "c", "d", "w", "o", "t", "l", "e"]
+                    .iter()
+                    .position(|&x| x == input.as_str())
+                    .unwrap() as i32;
+                break;
+            } else {
+                println!("Wrong input! Please try again");
+            }
+        }
+
+        moves = list_piece_moves(model.curr(), piece);
+
+        print_board(
+            &model.curr().board,
+            true,
+            1,
+            0,
+            moves.iter().filter(|&&x| x < 63).collect(),
+        );
+
+        print!("Legal moves: ");
+        for position in moves.iter().filter(|&&x| x < 63) {
+            print!("{} ", position);
+        }
+        println!();
+
+        // Get where to move to
+        println!("Please enter move.");
+        loop {
+            input.clear();
+            io::stdin().read_line(&mut input).unwrap();
+            input = input.trim().to_string();
+            if let Ok(ok) = input.parse::<i32>() {
+                move_to = ok;
 
                 if check_move(model.curr(), piece, move_to) {
                     make_move(model, piece, move_to);
