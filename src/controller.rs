@@ -4,15 +4,11 @@
 // Move: (index, moveTo)
 
 // TODO:
-// check_move
-// check_win
-// make_move
-//
 // For UI and AI:
 // list_moves
 // list_piece_moves
 //
-// possibly also handle history:
+// Possibly also handle history:
 // state_count
 // goto_state
 
@@ -20,29 +16,31 @@ use crate::model::{
     State, COL_COUNT, DEN_BLUE, DEN_RED, RIVERS, TRAPS_BLUE, TRAPS_RED,
 };
 
-static RIVER_MOVES: [(i32, i32); 10] = [
-    (15, 43),
-    (16, 44),
-    (18, 46),
-    (19, 47),
-    (21, 24),
-    (28, 31),
-    (35, 38),
-    (24, 27),
-    (31, 34),
-    (38, 41),
+// Arrays of arrays are used,
+// since, they are static anyways
+static RIVER_MOVES: [[i32; 2]; 10] = [
+    [15, 43],
+    [16, 44],
+    [18, 46],
+    [19, 47],
+    [21, 24],
+    [28, 31],
+    [35, 38],
+    [24, 27],
+    [31, 34],
+    [38, 41],
 ];
-static RIVER_LEAPS: [(i32, i32, i32); 10] = [
-    (22, 29, 36),
-    (23, 30, 37),
-    (25, 32, 39),
-    (26, 33, 40),
-    (22, 23, 63),
-    (29, 30, 63),
-    (36, 37, 63),
-    (25, 26, 63),
-    (32, 33, 63),
-    (39, 40, 63),
+static RIVER_LEAPS: [[i32; 3]; 10] = [
+    [22, 29, 36],
+    [23, 30, 37],
+    [25, 32, 39],
+    [26, 33, 40],
+    [22, 23, 63],
+    [29, 30, 63],
+    [36, 37, 63],
+    [25, 26, 63],
+    [32, 33, 63],
+    [39, 40, 63],
 ];
 
 pub fn check_move(state: &State, piece: i32, move_to: i32) -> bool {
@@ -89,8 +87,8 @@ pub fn check_walk(state: &State, piece: i32, move_to: i32) -> bool {
     // Checks if neither 1-square nor river
     let mut river = false;
     if !([1, 7].contains(&(original - move_to).abs())) {
-        if RIVER_MOVES.contains(&(original, move_to))
-            || RIVER_MOVES.contains(&(move_to, original))
+        if RIVER_MOVES.contains(&[original, move_to])
+            || RIVER_MOVES.contains(&[move_to, original])
         {
             river = true;
         } else {
@@ -105,16 +103,23 @@ pub fn check_walk(state: &State, piece: i32, move_to: i32) -> bool {
             return false;
         }
 
-        // TODO:
         // Check if rat in (intervening) river
         if let Some(leap) =
-            RIVER_MOVES.iter().position(|&x| x == (original, move_to))
+            RIVER_MOVES.iter().position(|&x| x == [original, move_to])
         {
-            // Check for rat
+            if RIVER_LEAPS[leap].contains(&state.board.blue[0])
+                || RIVER_LEAPS[leap].contains(&state.board.red[0])
+            {
+                return false;
+            }
         } else if let Some(leap) =
-            RIVER_MOVES.iter().position(|&x| x == (original, move_to))
+            RIVER_MOVES.iter().position(|&x| x == [original, move_to])
         {
-            // Check for rat
+            if RIVER_LEAPS[leap].contains(&state.board.blue[0])
+                || RIVER_LEAPS[leap].contains(&state.board.red[0])
+            {
+                return false;
+            }
         }
     }
 
@@ -162,6 +167,7 @@ pub fn check_capture(state: &State, piece: i32, move_to: i32) -> bool {
 }
 
 /// Assumes that the move is legal already
+/// Returns a new state where the move is made
 pub fn make_move(state: &State, piece: i32, move_to: i32) -> State {
     let mut new_state = *state;
 
