@@ -2,14 +2,22 @@ use crate::model::{Board, COL_COUNT, DENS, RIVERS, TRAPS_BLUE, TRAPS_RED};
 
 use colored::Colorize;
 
-pub fn print_board(board: &Board) {
+/// Prints the board
+/// Formats the pieces as R C D W O T L E
+pub fn print_board(board: &Board, border: bool, space: i32, indent: i32) {
     let pieces = ["R", "C", "D", "W", "O", "T", "L", "E"];
 
     // Print and add borders
-    println!("+-------------+");
+    if border {
+        println!(
+            "{}+-------{}+",
+            " ".repeat(indent as usize),
+            "-".repeat((space * 6) as usize)
+        );
+    }
     for i in 0..63 {
-        if i % COL_COUNT == 0 {
-            print!("|");
+        if border && i % COL_COUNT == 0 {
+            print!("{}|", " ".repeat(indent as usize));
         }
 
         // Find and print correct square type
@@ -32,10 +40,19 @@ pub fn print_board(board: &Board) {
         }
 
         if i % COL_COUNT == COL_COUNT - 1 {
-            println!("|");
+            if border {
+                print!("|");
+            }
+            println!();
         } else {
-            print!(" ");
+            print!("{}", " ".repeat(space as usize));
         }
     }
-    println!("+-------------+");
+    if border {
+        println!(
+            "{}+-------{}+",
+            " ".repeat(indent as usize),
+            "-".repeat((space * 6) as usize)
+        );
+    }
 }

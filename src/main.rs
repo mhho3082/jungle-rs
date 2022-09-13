@@ -17,13 +17,16 @@ fn main() {
 
 fn _test_connection() {
     let mut model = Model::new();
+
+    // Should be in controller
     {
         let mut state = model.history[0];
         state.board.blue[0] -= 1;
         state.next_blue = false;
         model.history.push(state);
     }
+
     for x in model.history {
-        print_board(&x.board);
+        print_board(&x.board, true, 1, 0);
     }
 }
