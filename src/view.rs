@@ -1,4 +1,6 @@
-use crate::model::{Board, COL_COUNT, DEN_BLUE, DEN_RED, RIVERS, TRAPS_BLUE, TRAPS_RED};
+use crate::model::{
+    Board, COL_COUNT, DEN_BLUE, DEN_RED, RIVERS, TRAPS_BLUE, TRAPS_RED,
+};
 
 use colored::Colorize;
 

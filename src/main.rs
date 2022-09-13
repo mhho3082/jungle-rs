@@ -27,9 +27,11 @@ fn _test_connection() {
             "{}",
             check_move(model.history.last().unwrap(), piece, move_to)
         );
-        model
-            .history
-            .push(make_move(model.history.last().unwrap(), piece, move_to));
+        model.history.push(make_move(
+            model.history.last().unwrap(),
+            piece,
+            move_to,
+        ));
     }
 
     for x in &model.history {

@@ -16,7 +16,9 @@
 // state_count
 // goto_state
 
-use crate::model::{State, COL_COUNT, DEN_BLUE, DEN_RED, RIVERS, TRAPS_BLUE, TRAPS_RED};
+use crate::model::{
+    State, COL_COUNT, DEN_BLUE, DEN_RED, RIVERS, TRAPS_BLUE, TRAPS_RED,
+};
 
 static RIVER_MOVES: [(i32, i32); 10] = [
     (15, 43),
@@ -29,6 +31,18 @@ static RIVER_MOVES: [(i32, i32); 10] = [
     (24, 27),
     (31, 34),
     (38, 41),
+];
+static RIVER_LEAPS: [(i32, i32, i32); 10] = [
+    (22, 29, 36),
+    (23, 30, 37),
+    (25, 32, 39),
+    (26, 33, 40),
+    (22, 23, 63),
+    (29, 30, 63),
+    (36, 37, 63),
+    (25, 26, 63),
+    (32, 33, 63),
+    (39, 40, 63),
 ];
 
 pub fn check_move(state: &State, piece: i32, move_to: i32) -> bool {
@@ -75,7 +89,8 @@ pub fn check_walk(state: &State, piece: i32, move_to: i32) -> bool {
     // Checks if neither 1-square nor river
     let mut river = false;
     if !([1, 7].contains(&(original - move_to).abs())) {
-        if RIVER_MOVES.contains(&(original, move_to)) || RIVER_MOVES.contains(&(move_to, original))
+        if RIVER_MOVES.contains(&(original, move_to))
+            || RIVER_MOVES.contains(&(move_to, original))
         {
             river = true;
         } else {
@@ -92,6 +107,15 @@ pub fn check_walk(state: &State, piece: i32, move_to: i32) -> bool {
 
         // TODO:
         // Check if rat in (intervening) river
+        if let Some(leap) =
+            RIVER_MOVES.iter().position(|&x| x == (original, move_to))
+        {
+            // Check for rat
+        } else if let Some(leap) =
+            RIVER_MOVES.iter().position(|&x| x == (original, move_to))
+        {
+            // Check for rat
+        }
     }
 
     true
@@ -145,13 +169,15 @@ pub fn make_move(state: &State, piece: i32, move_to: i32) -> State {
     if new_state.cur_blue {
         new_state.board.blue[piece as usize] = move_to;
         if state.board.red.contains(&move_to) {
-            let enemy = state.board.red.iter().position(|&x| x == move_to).unwrap();
+            let enemy =
+                state.board.red.iter().position(|&x| x == move_to).unwrap();
             new_state.board.red[enemy] = 63;
         }
     } else {
         new_state.board.red[piece as usize] = move_to;
         if state.board.blue.contains(&move_to) {
-            let enemy = state.board.blue.iter().position(|&x| x == move_to).unwrap();
+            let enemy =
+                state.board.blue.iter().position(|&x| x == move_to).unwrap();
             new_state.board.blue[enemy] = 63;
         }
     }
