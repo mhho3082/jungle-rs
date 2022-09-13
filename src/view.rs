@@ -1,7 +1,6 @@
 use crate::controller::{check_move, list_piece_moves, make_move};
-use crate::model::Model;
 use crate::model::{
-    Board, COL_COUNT, DEN_BLUE, DEN_RED, RIVERS, TRAPS_BLUE, TRAPS_RED,
+    Board, Model, COL_COUNT, DEN_BLUE, DEN_RED, RIVERS, TRAPS_BLUE, TRAPS_RED,
 };
 use std::io;
 
