@@ -9,6 +9,9 @@ use std::io;
 // The clean-screen print copied from
 // https://stackoverflow.com/questions/34837011/how-to-clear-the-terminal-screen-in-rust-after-a-new-line-is-printed
 
+// TODO:
+// Allow full name and multi-case
+
 /// The CLI-based user loop
 pub fn cli(
     model: &mut Model,
@@ -32,7 +35,15 @@ pub fn cli(
 
     'main: loop {
         if model.curr().won {
-            // Check win and stop the loop
+            // Clean the screen
+            if !no_clean && !debug {
+                print!("\x1B[2J\x1B[1;1H");
+            }
+
+            // Print map
+            print_board(&model.curr().board, true, 1, 0, Vec::new());
+
+            // Congratulate win and stop the loop
             println!(
                 "{} won! Congratulations!",
                 if model.curr().cur_blue { "Red" } else { "Blue" }
@@ -199,11 +210,17 @@ pub fn print_board(
 
     // Print and add borders
     if border {
-        println!(
-            "{}+-------{}+",
+        print!(
+            "{}+-------{}+ ",
             " ".repeat(indent as usize),
             "-".repeat((space * 6) as usize)
         );
+        for (i, e) in board.red.iter().enumerate() {
+            if e > &62 {
+                print!("{} ", pieces[i].red());
+            }
+        }
+        println!();
     }
     for i in 0..63 {
         if i % COL_COUNT == 0 {
@@ -274,10 +291,16 @@ pub fn print_board(
         }
     }
     if border {
-        println!(
-            "{}+-------{}+",
+        print!(
+            "{}+-------{}+ ",
             " ".repeat(indent as usize),
             "-".repeat((space * 6) as usize)
         );
+        for (i, e) in board.blue.iter().enumerate() {
+            if e > &62 {
+                print!("{} ", pieces[i].blue());
+            }
+        }
+        println!();
     }
 }
