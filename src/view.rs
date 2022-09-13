@@ -105,13 +105,8 @@ pub fn cli(
                 input.clear();
                 io::stdin().read_line(&mut input).unwrap();
                 input = input.trim().to_string();
-                if ["r", "c", "d", "w", "o", "t", "l", "e"]
-                    .contains(&input.as_str())
-                {
-                    piece = ["r", "c", "d", "w", "o", "t", "l", "e"]
-                        .iter()
-                        .position(|&x| x == input.as_str())
-                        .unwrap() as i32;
+                if let Some(index) = accept_piece(&input) {
+                    piece = index;
                     break 'input;
                 } else {
                     println!("Wrong input! Please try again");
@@ -199,25 +194,50 @@ pub fn cli(
     }
 }
 
-fn accept_arrow(input: &str) -> Option<usize> {
-    if !["w", "a", "s", "d", "h", "j", "k", "l"].contains(&input)
-        && !["W", "A", "S", "D", "H", "J", "K", "L"].contains(&input)
+/// Accepts piece inputs insensitively
+fn accept_piece(input: &str) -> Option<i32> {
+    if !["r", "c", "d", "w", "o", "t", "l", "e"]
+        .contains(&input.to_lowercase().as_str())
+        && ![
+            "rat", "cat", "dog", "wolf", "leopard", "tiger", "lion", "elephant",
+        ]
+        .contains(&input.to_lowercase().as_str())
     {
         return None;
     }
 
-    if let Some(dir) = ["h", "j", "k", "l"].iter().position(|&x| x == input) {
-        Some(dir)
-    } else if let Some(dir) =
-        ["a", "s", "w", "d"].iter().position(|&x| x == input)
+    if let Some(index) = ["r", "c", "d", "w", "o", "t", "l", "e"]
+        .iter()
+        .position(|&x| x == input.to_lowercase().as_str())
     {
-        Some(dir)
-    } else if let Some(dir) =
-        ["H", "J", "K", "L"].iter().position(|&x| x == input)
+        Some(index as i32)
+    } else {
+        [
+            "rat", "cat", "dog", "wolf", "leopard", "tiger", "lion", "elephant",
+        ]
+        .iter()
+        .position(|&x| x == input.to_lowercase().as_str())
+        .map(|x| x as i32)
+    }
+}
+
+/// Accepts direction inputs case-insensitively
+fn accept_arrow(input: &str) -> Option<usize> {
+    if !["w", "a", "s", "d", "h", "j", "k", "l"]
+        .contains(&input.to_lowercase().as_str())
+    {
+        return None;
+    }
+
+    if let Some(dir) = ["h", "j", "k", "l"]
+        .iter()
+        .position(|&x| x == input.to_lowercase().as_str())
     {
         Some(dir)
     } else {
-        ["A", "S", "W", "D"].iter().position(|&x| x == input)
+        ["a", "s", "w", "d"]
+            .iter()
+            .position(|&x| x == input.to_lowercase().as_str())
     }
 }
 
