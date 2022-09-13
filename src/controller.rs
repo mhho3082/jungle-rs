@@ -4,16 +4,11 @@
 // Move: (index, moveTo)
 
 // TODO:
-// For AI:
-// list_piece_moves
-//
-// Handle history:
+// Time machine:
 // state_count
 // goto_state
 
-use crate::model::{
-    Model, State, COL_COUNT, DEN_BLUE, DEN_RED, RIVERS, TRAPS_BLUE, TRAPS_RED,
-};
+use crate::model::*;
 
 /// Gives possible move locations in [hjkl] (or <V^>)
 pub fn list_piece_moves(state: &State, piece: i32) -> [i32; 4] {
@@ -46,6 +41,21 @@ pub fn list_piece_moves(state: &State, piece: i32) -> [i32; 4] {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    out
+}
+
+/// Gives all possible moves for AI
+pub fn list_all_moves(state: &State) -> Vec<(i32, i32)> {
+    let mut out = Vec::new();
+
+    for piece in 0..8 {
+        for move_to in list_piece_moves(state, piece) {
+            if move_to < 63 {
+                out.push((piece, move_to));
             }
         }
     }

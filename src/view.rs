@@ -1,7 +1,5 @@
-use crate::controller::{check_move, list_piece_moves, make_move};
-use crate::model::{
-    Board, Model, COL_COUNT, DEN_BLUE, DEN_RED, RIVERS, TRAPS_BLUE, TRAPS_RED,
-};
+use crate::controller::*;
+use crate::model::*;
 use std::io;
 
 use colored::Colorize;
@@ -23,6 +21,10 @@ pub fn user_loop(model: &mut Model) {
             "{}'s turn! Please enter piece name.",
             if model.curr().cur_blue { "Blue" } else { "Red" }
         );
+
+        // TEMP
+        println!("{:?}", list_all_moves(model.curr()));
+
         loop {
             input.clear();
             io::stdin().read_line(&mut input).unwrap();
