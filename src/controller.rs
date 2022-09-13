@@ -5,7 +5,7 @@
 
 // TODO:
 // For UI and AI:
-// list_moves
+// list_all_moves
 // list_piece_moves
 //
 // Possibly also handle history:
@@ -15,33 +15,6 @@
 use crate::model::{
     State, COL_COUNT, DEN_BLUE, DEN_RED, RIVERS, TRAPS_BLUE, TRAPS_RED,
 };
-
-// Arrays of arrays are used,
-// since, they are static anyways
-static RIVER_MOVES: [[i32; 2]; 10] = [
-    [15, 43],
-    [16, 44],
-    [18, 46],
-    [19, 47],
-    [21, 24],
-    [28, 31],
-    [35, 38],
-    [24, 27],
-    [31, 34],
-    [38, 41],
-];
-static RIVER_LEAPS: [[i32; 3]; 10] = [
-    [22, 29, 36],
-    [23, 30, 37],
-    [25, 32, 39],
-    [26, 33, 40],
-    [22, 23, 63],
-    [29, 30, 63],
-    [36, 37, 63],
-    [25, 26, 63],
-    [32, 33, 63],
-    [39, 40, 63],
-];
 
 pub fn check_move(state: &State, piece: i32, move_to: i32) -> bool {
     check_walk(state, piece, move_to) && check_capture(state, piece, move_to)
@@ -201,3 +174,30 @@ pub fn check_win(state: &State) -> bool {
         || state.board.blue.iter().all(|x| x > &62)
         || state.board.red.iter().all(|x| x > &62)
 }
+
+// Arrays of arrays are used,
+// since, they are static anyways
+static RIVER_MOVES: [[i32; 2]; 10] = [
+    [15, 43],
+    [16, 44],
+    [18, 46],
+    [19, 47],
+    [21, 24],
+    [28, 31],
+    [35, 38],
+    [24, 27],
+    [31, 34],
+    [38, 41],
+];
+static RIVER_LEAPS: [[i32; 3]; 10] = [
+    [22, 29, 36],
+    [23, 30, 37],
+    [25, 32, 39],
+    [26, 33, 40],
+    [22, 23, 63],
+    [29, 30, 63],
+    [36, 37, 63],
+    [25, 26, 63],
+    [32, 33, 63],
+    [39, 40, 63],
+];
