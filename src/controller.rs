@@ -97,7 +97,7 @@ pub fn check_capture(state: &State, piece: i32, move_to: i32) -> bool {
     }
 
     // Check capture
-    if (enemy >= piece && !(piece == 7 && enemy == 0)) || piece == 0 && enemy == 7 {
+    if (piece >= enemy && !(piece == 7 && enemy == 0)) || piece == 0 && enemy == 7 {
         true
     } else if state.cur_blue {
         TRAPS_BLUE.contains(&enemy)
