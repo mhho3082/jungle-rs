@@ -23,7 +23,7 @@ pub fn cli(
     let mut input = String::new();
 
     let mut piece: i32;
-    let mut move_to: i32 = 0;
+    let mut move_to: i32;
     let mut moves: [i32; 4];
 
     // Reverse the order
@@ -164,20 +164,8 @@ pub fn cli(
                     input.clear();
                     io::stdin().read_line(&mut input).unwrap();
                     input = input.trim().to_string();
-                    if ["w", "a", "s", "d", "h", "j", "k", "l"]
-                        .contains(&input.as_str())
-                    {
-                        if let Some(dir) = ["h", "j", "k", "l"]
-                            .iter()
-                            .position(|&x| x == input.as_str())
-                        {
-                            move_to = moves[dir];
-                        } else if let Some(dir) = ["a", "s", "w", "d"]
-                            .iter()
-                            .position(|&x| x == input.as_str())
-                        {
-                            move_to = moves[dir];
-                        }
+                    if let Some(dir) = accept_arrow(&input) {
+                        move_to = moves[dir];
 
                         if check_move(model.curr(), piece, move_to) {
                             make_move(model, piece, move_to);
@@ -192,6 +180,28 @@ pub fn cli(
                 }
             }
         }
+    }
+}
+
+fn accept_arrow(input: &str) -> Option<usize> {
+    if !["w", "a", "s", "d", "h", "j", "k", "l"].contains(&input)
+        && !["W", "A", "S", "D", "H", "J", "K", "L"].contains(&input)
+    {
+        return None;
+    }
+
+    if let Some(dir) = ["h", "j", "k", "l"].iter().position(|&x| x == input) {
+        Some(dir)
+    } else if let Some(dir) =
+        ["a", "s", "w", "d"].iter().position(|&x| x == input)
+    {
+        Some(dir)
+    } else if let Some(dir) =
+        ["H", "J", "K", "L"].iter().position(|&x| x == input)
+    {
+        Some(dir)
+    } else {
+        ["A", "S", "W", "D"].iter().position(|&x| x == input)
     }
 }
 
