@@ -41,7 +41,14 @@ pub fn cli(
             }
 
             // Print map
-            print_board(&model.curr().board, true, 1, 0, Vec::new());
+            print_board(
+                &model.curr().board,
+                model.current,
+                true,
+                1,
+                0,
+                Vec::new(),
+            );
 
             // Congratulate win and stop the loop
             println!(
@@ -74,7 +81,14 @@ pub fn cli(
             }
 
             // Print map
-            print_board(&model.curr().board, true, 1, 0, Vec::new());
+            print_board(
+                &model.curr().board,
+                model.current,
+                true,
+                1,
+                0,
+                Vec::new(),
+            );
 
             // Get which piece to move
             println!(
@@ -110,6 +124,7 @@ pub fn cli(
 
                 print_board(
                     &model.curr().board,
+                    model.current,
                     true,
                     1,
                     0,
@@ -152,6 +167,7 @@ pub fn cli(
 
                 print_board(
                     &model.curr().board,
+                    model.current,
                     true,
                     1,
                     0,
@@ -209,6 +225,7 @@ fn accept_arrow(input: &str) -> Option<usize> {
 /// Formats the pieces as R C D W O T L E
 pub fn print_board(
     board: &Board,
+    step: usize,
     border: bool,
     space: i32,
     indent: i32,
@@ -217,6 +234,12 @@ pub fn print_board(
     let pieces = ["R", "C", "D", "W", "O", "T", "L", "E"];
 
     let mut was_river = false;
+
+    println!(
+        "{}    Step {}",
+        " ".repeat((indent + space / 2) as usize),
+        step + 1
+    );
 
     // Print and add borders
     if border {
