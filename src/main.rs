@@ -2,7 +2,7 @@ mod controller;
 mod model;
 mod view;
 
-use crate::controller::{check_win, make_move};
+use crate::controller::{check_move, check_win, make_move};
 use crate::model::Model;
 use crate::view::print_board;
 
@@ -18,13 +18,19 @@ fn _test_connection() {
 
     // Illegal move XD
     // Blue
-    model
-        .history
-        .push(make_move(model.history.last().unwrap(), 3, 37));
-    // Red
-    model
-        .history
-        .push(make_move(model.history.last().unwrap(), 4, 23));
+    let moves = [
+        (3, 37), // Blue
+        (4, 23), // Red
+    ];
+    for (piece, move_to) in moves {
+        println!(
+            "{}",
+            check_move(model.history.last().unwrap(), piece, move_to)
+        );
+        model
+            .history
+            .push(make_move(model.history.last().unwrap(), piece, move_to));
+    }
 
     for x in &model.history {
         print_board(&x.board, true, 1, 0);

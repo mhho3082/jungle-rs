@@ -18,6 +18,19 @@
 
 use crate::model::{State, COL_COUNT, DEN_BLUE, DEN_RED, RIVERS, TRAPS_BLUE, TRAPS_RED};
 
+static RIVER_MOVES: [(i32, i32); 10] = [
+    (15, 43),
+    (16, 44),
+    (18, 46),
+    (19, 47),
+    (21, 24),
+    (28, 31),
+    (35, 38),
+    (24, 27),
+    (31, 34),
+    (38, 41),
+];
+
 pub fn check_move(state: &State, piece: i32, move_to: i32) -> bool {
     check_walk(state, piece, move_to) && check_capture(state, piece, move_to)
 }
@@ -61,20 +74,8 @@ pub fn check_walk(state: &State, piece: i32, move_to: i32) -> bool {
 
     // Checks if neither 1-square nor river
     let mut river = false;
-    let river_moves = [
-        (15, 50),
-        (16, 51),
-        (18, 53),
-        (19, 54),
-        (21, 24),
-        (28, 31),
-        (35, 38),
-        (24, 27),
-        (31, 34),
-        (38, 41),
-    ];
     if !([1, 7].contains(&(original - move_to).abs())) {
-        if river_moves.contains(&(original, move_to)) || river_moves.contains(&(move_to, original))
+        if RIVER_MOVES.contains(&(original, move_to)) || RIVER_MOVES.contains(&(move_to, original))
         {
             river = true;
         } else {
