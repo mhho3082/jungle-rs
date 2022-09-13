@@ -9,9 +9,6 @@ use crate::view::print_board;
 // The best explanation of the game:
 // https://en.wikipedia.org/wiki/Jungle_(board_game)
 
-// To print colors:
-// https://stackoverflow.com/questions/69981449/how-do-i-print-colored-text-to-the-terminal-in-rust
-
 fn main() {
     _test_connection();
 }
