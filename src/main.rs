@@ -4,7 +4,7 @@ mod view;
 
 use std::io;
 
-use crate::controller::{check_move, check_win, make_move};
+use crate::controller::{check_move, check_win, list_piece_moves, make_move};
 use crate::model::Model;
 use crate::view::print_board;
 
@@ -17,7 +17,8 @@ fn main() {
     let mut curr = 0;
 
     let mut piece: i32;
-    let mut move_to: i32;
+    let mut move_to: i32 = 0;
+    let mut moves: [i32; 4];
 
     loop {
         // Print map
@@ -36,7 +37,7 @@ fn main() {
             input.clear();
             io::stdin().read_line(&mut input).unwrap();
             input = input.trim().to_string();
-            if ["R", "C", "D", "W", "O", "T", "L", "E"]
+            if ["r", "c", "d", "w", "o", "t", "l", "e"]
                 .contains(&input.as_str())
             {
                 break;
@@ -44,23 +45,55 @@ fn main() {
                 println!("Wrong input! Please try again");
             }
         }
-        piece = ["R", "C", "D", "W", "O", "T", "L", "E"]
+        piece = ["r", "c", "d", "w", "o", "t", "l", "e"]
             .iter()
             .position(|&x| x == input.as_str())
             .unwrap() as i32;
 
+        // TEMP: List possible moves
+        moves = list_piece_moves(&model.history[curr], piece);
+
+        println!("{moves:?}");
+        print!("Legal move directions: ");
+        for (i, x) in moves.iter().enumerate() {
+            if x < &63 {
+                match i {
+                    0 => print!("H"),
+                    1 => print!("J"),
+                    2 => print!("K"),
+                    3 => print!("L"),
+                    _ => print!("Error"),
+                }
+            } else {
+                print!(" ");
+            }
+        }
+        println!();
+
         // Get where to move to
-        println!("Please enter move location.");
+        println!("Please enter move direction.");
         loop {
             input.clear();
             io::stdin().read_line(&mut input).unwrap();
             input = input.trim().to_string();
-            if let Ok(ok) = input.parse::<i32>() {
-                move_to = ok;
+            if ["w", "a", "s", "d", "h", "j", "k", "l"]
+                .contains(&input.as_str())
+            {
                 break;
             } else {
                 println!("Wrong input! Please try again");
             }
+        }
+        if let Some(dir) = ["h", "j", "k", "l"]
+            .iter()
+            .position(|&x| x == input.as_str())
+        {
+            move_to = moves[dir];
+        } else if let Some(dir) = ["a", "s", "w", "d"]
+            .iter()
+            .position(|&x| x == input.as_str())
+        {
+            move_to = moves[dir];
         }
 
         if check_move(&model.history[curr], piece, move_to) {

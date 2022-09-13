@@ -16,6 +16,46 @@ use crate::model::{
     State, COL_COUNT, DEN_BLUE, DEN_RED, RIVERS, TRAPS_BLUE, TRAPS_RED,
 };
 
+/// Gives possible move locations in [hjkl] (or <V^>)
+pub fn list_piece_moves(state: &State, piece: i32) -> [i32; 4] {
+    let original = if state.cur_blue {
+        state.board.blue[piece as usize]
+    } else {
+        state.board.red[piece as usize]
+    };
+
+    let mut out = [63; 4];
+
+    // Find one-step moves
+    for (i, e) in [-1, 7, -7, 1].iter().enumerate() {
+        if check_move(state, piece, original + e) {
+            out[i] = original + e;
+        }
+    }
+
+    // Find river moves
+    if [5, 6].contains(&piece) {
+        for (i, e) in [-1, 7, -7, 1].iter().enumerate() {
+            if RIVERS.contains(&(original + e)) {
+                println!("{e:?}");
+                for x in RIVER_MOVES {
+                    if x.contains(&original) {
+                        println!("{x:?}");
+                        let temp = x.iter().filter(|y| y != &&original).sum();
+                        if (e < &0 && temp < original)
+                            || (e > &0 && temp > original)
+                        {
+                            out[i] = temp;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    out
+}
+
 pub fn check_move(state: &State, piece: i32, move_to: i32) -> bool {
     check_walk(state, piece, move_to) && check_capture(state, piece, move_to)
 }
@@ -72,7 +112,7 @@ pub fn check_walk(state: &State, piece: i32, move_to: i32) -> bool {
     // Checks if legal river
     if river {
         // Only lion and tiger can jump
-        if ![6, 7].contains(&piece) {
+        if ![5, 6].contains(&piece) {
             return false;
         }
 
