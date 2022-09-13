@@ -13,3 +13,12 @@
 // possibly also handle history:
 // state_count
 // goto_state
+
+use crate::model::{State, DENS};
+
+pub fn check_win(state: &State) -> bool {
+    state.board.blue.contains(&DENS[0])
+        || state.board.red.contains(&DENS[1])
+        || state.board.blue.iter().all(|x| x > &62)
+        || state.board.red.iter().all(|x| x > &62)
+}

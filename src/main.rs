@@ -2,6 +2,8 @@ mod controller;
 mod model;
 mod view;
 
+use controller::check_win;
+
 use crate::model::Model;
 use crate::view::print_board;
 
@@ -33,7 +35,9 @@ fn _test_connection() {
         model.history.push(state);
     }
 
-    for x in model.history {
+    for x in &model.history {
         print_board(&x.board, true, 1, 0);
     }
+
+    println!("{}", check_win(model.history.last().unwrap()));
 }
