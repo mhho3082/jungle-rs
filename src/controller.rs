@@ -87,7 +87,12 @@ pub fn check_capture(state: &State, piece: i32, move_to: i32) -> bool {
         return true;
     }
 
-    let enemy = state.board.red.iter().position(|&x| x == move_to).unwrap() as i32;
+    // Get enemy piece
+    let enemy = if state.cur_blue {
+        state.board.red.iter().position(|&x| x == move_to).unwrap() as i32
+    } else {
+        state.board.blue.iter().position(|&x| x == move_to).unwrap() as i32
+    };
 
     // Check if cross-border
     if (RIVERS.contains(&move_to) && !RIVERS.contains(&enemy))
