@@ -9,9 +9,6 @@ use std::io;
 // The clean-screen print copied from
 // https://stackoverflow.com/questions/34837011/how-to-clear-the-terminal-screen-in-rust-after-a-new-line-is-printed
 
-// TODO:
-// Allow full name and multi-case
-
 /// The CLI-based user loop
 pub fn cli(
     model: &mut Model,
