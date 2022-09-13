@@ -18,10 +18,10 @@ This will take quite some time to compile (mainly the libraries), then it should
 
 If this runs too slowly (in runtime, not compile time) for some reason, try adding the `--release` flag.
 
-Add `--` before this application's flags to use them:
+Add `--` before this application's flags to use them separate from `cargo`'s flags:
 
 ```bash
-cargo run -- -d # debug mode
+cargo run --release -- -d # debug mode
 ```
 
 So, to get the list of flags:
