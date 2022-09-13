@@ -19,15 +19,16 @@ fn _test_connection() {
     let mut model = Model::new();
 
     // Should be in controller
+    // btw illegal move XD
     {
         let mut state = *model.history.last().unwrap();
-        state.board.blue[0] = 22;
+        state.board.blue[3] = 37;
         state.next_blue = false;
         model.history.push(state);
     }
     {
         let mut state = *model.history.last().unwrap();
-        state.board.red[0] = 23;
+        state.board.red[4] = 23;
         state.next_blue = true;
         model.history.push(state);
     }
