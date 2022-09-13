@@ -7,6 +7,8 @@
 // check_move
 // check_win
 // make_move
+//
+// For UI and AI:
 // list_moves
 // list_piece_moves
 //
@@ -14,7 +16,7 @@
 // state_count
 // goto_state
 
-use crate::model::{State, DEN_BLUE, DEN_RED, RIVERS, TRAPS_BLUE, TRAPS_RED};
+use crate::model::{State, COL_COUNT, DEN_BLUE, DEN_RED, RIVERS, TRAPS_BLUE, TRAPS_RED};
 
 pub fn check_move(state: &State, piece: i32, move_to: i32) -> bool {
     check_walk(state, piece, move_to) && check_capture(state, piece, move_to)
@@ -31,6 +33,13 @@ pub fn check_walk(state: &State, piece: i32, move_to: i32) -> bool {
 
     // Checks if out-of-bounds
     if original < 0 || move_to < 0 || original > 62 || move_to > 62 {
+        return false;
+    }
+
+    // Checks if loop-around
+    if (original % COL_COUNT == 0 && (move_to + 1) % COL_COUNT == 0)
+        || (move_to % COL_COUNT == 0 && (original + 1) % COL_COUNT == 0)
+    {
         return false;
     }
 
@@ -88,6 +97,7 @@ pub fn check_walk(state: &State, piece: i32, move_to: i32) -> bool {
     true
 }
 
+/// Checks if capture, if any, is legal (or crash into ally)
 pub fn check_capture(state: &State, piece: i32, move_to: i32) -> bool {
     // Check if there is anything to capture
     // or crash into ally
