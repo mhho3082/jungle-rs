@@ -2,8 +2,7 @@ mod controller;
 mod model;
 mod view;
 
-use controller::check_win;
-
+use crate::controller::{check_win, make_move};
 use crate::model::Model;
 use crate::view::print_board;
 
@@ -22,18 +21,12 @@ fn _test_connection() {
 
     // Should be in controller
     // btw illegal move XD
-    {
-        let mut state = *model.history.last().unwrap();
-        state.board.blue[3] = 37;
-        state.next_blue = false;
-        model.history.push(state);
-    }
-    {
-        let mut state = *model.history.last().unwrap();
-        state.board.red[4] = 23;
-        state.next_blue = true;
-        model.history.push(state);
-    }
+    model
+        .history
+        .push(make_move(model.history.last().unwrap(), 3, 37));
+    model
+        .history
+        .push(make_move(model.history.last().unwrap(), 4, 23));
 
     for x in &model.history {
         print_board(&x.board, true, 1, 0);

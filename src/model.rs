@@ -29,8 +29,8 @@ impl Model {
 pub struct State {
     /// The current board
     pub board: Board,
-    /// If the next player is blue (player 1)
-    pub next_blue: bool,
+    /// If the current player is blue (player 1)
+    pub cur_blue: bool,
     /// If the board is won at this point
     pub won: bool,
 }
@@ -40,7 +40,7 @@ impl State {
     pub fn new() -> Self {
         State {
             board: Board::new(),
-            next_blue: true,
+            cur_blue: true,
             won: false,
         }
     }
