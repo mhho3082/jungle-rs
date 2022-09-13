@@ -15,13 +15,21 @@ pub struct Model {
     /// The collection of all states played,
     /// including the empty state
     pub history: Vec<State>,
+    pub current: usize,
 }
 
 impl Model {
+    /// Initialize a new model
     pub fn new() -> Self {
         Model {
             history: vec![State::new()],
+            current: 0,
         }
+    }
+
+    /// A shorthand for the current state
+    pub fn curr(&self) -> &State {
+        &self.history[self.current]
     }
 }
 

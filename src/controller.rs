@@ -4,16 +4,15 @@
 // Move: (index, moveTo)
 
 // TODO:
-// For UI and AI:
-// list_all_moves
+// For AI:
 // list_piece_moves
 //
-// Possibly also handle history:
+// Handle history:
 // state_count
 // goto_state
 
 use crate::model::{
-    State, COL_COUNT, DEN_BLUE, DEN_RED, RIVERS, TRAPS_BLUE, TRAPS_RED,
+    Model, State, COL_COUNT, DEN_BLUE, DEN_RED, RIVERS, TRAPS_BLUE, TRAPS_RED,
 };
 
 /// Gives possible move locations in [hjkl] (or <V^>)
@@ -37,10 +36,8 @@ pub fn list_piece_moves(state: &State, piece: i32) -> [i32; 4] {
     if [5, 6].contains(&piece) {
         for (i, e) in [-1, 7, -7, 1].iter().enumerate() {
             if RIVERS.contains(&(original + e)) {
-                println!("{e:?}");
                 for x in RIVER_MOVES {
                     if x.contains(&original) {
-                        println!("{x:?}");
                         let temp = x.iter().filter(|y| y != &&original).sum();
                         if (e < &0 && temp < original)
                             || (e > &0 && temp > original)
@@ -181,31 +178,32 @@ pub fn check_capture(state: &State, piece: i32, move_to: i32) -> bool {
 
 /// Assumes that the move is legal already
 /// Returns a new state where the move is made
-pub fn make_move(state: &State, piece: i32, move_to: i32) -> State {
-    let mut new_state = *state;
+pub fn make_move(model: &mut Model, piece: i32, move_to: i32) {
+    let mut state = *model.curr();
 
     // Move piece and make capture if needed
-    if new_state.cur_blue {
-        new_state.board.blue[piece as usize] = move_to;
+    if state.cur_blue {
+        state.board.blue[piece as usize] = move_to;
         if state.board.red.contains(&move_to) {
             let enemy =
                 state.board.red.iter().position(|&x| x == move_to).unwrap();
-            new_state.board.red[enemy] = 63;
+            state.board.red[enemy] = 63;
         }
     } else {
-        new_state.board.red[piece as usize] = move_to;
+        state.board.red[piece as usize] = move_to;
         if state.board.blue.contains(&move_to) {
             let enemy =
                 state.board.blue.iter().position(|&x| x == move_to).unwrap();
-            new_state.board.blue[enemy] = 63;
+            state.board.blue[enemy] = 63;
         }
     }
 
     // Toggles switches
-    new_state.cur_blue = !new_state.cur_blue;
-    new_state.won = check_win(&new_state);
+    state.cur_blue = !state.cur_blue;
+    state.won = check_win(&state);
 
-    new_state
+    model.history.push(state);
+    model.current += 1;
 }
 
 pub fn check_win(state: &State) -> bool {
