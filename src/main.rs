@@ -21,6 +21,11 @@ struct Args {
     /// Whether player red is an AI
     #[clap(short, long, value_parser, default_value_t = false)]
     ai: bool,
+
+    /// Whether not to clean the screen after each input
+    /// Always off in debug mode
+    #[clap(short, long, value_parser, default_value_t = false)]
+    no_clean: bool,
 }
 
 // The best explanation of the game:
@@ -30,5 +35,5 @@ fn main() {
     let args = Args::parse();
 
     let mut model = Model::new();
-    cli(&mut model, args.ai, args.reverse, args.debug);
+    cli(&mut model, args.ai, args.reverse, args.debug, args.no_clean);
 }

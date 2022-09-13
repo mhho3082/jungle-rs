@@ -6,8 +6,17 @@ use rand::seq::SliceRandom;
 use rand::thread_rng;
 use std::io;
 
+// The clean-screen print copied from
+// https://stackoverflow.com/questions/34837011/how-to-clear-the-terminal-screen-in-rust-after-a-new-line-is-printed
+
 /// The CLI-based user loop
-pub fn cli(model: &mut Model, ai: bool, reverse: bool, debug: bool) {
+pub fn cli(
+    model: &mut Model,
+    ai: bool,
+    reverse: bool,
+    debug: bool,
+    no_clean: bool,
+) {
     let mut input = String::new();
 
     let mut piece: i32;
@@ -21,8 +30,17 @@ pub fn cli(model: &mut Model, ai: bool, reverse: bool, debug: bool) {
 
     let mut rng = thread_rng();
 
-    loop {
-        if ai && !model.curr().cur_blue {
+    'main: loop {
+        if model.curr().won {
+            // Check win and stop the loop
+            println!(
+                "{} won! Congratulations!",
+                if model.curr().cur_blue { "Red" } else { "Blue" }
+            );
+            break 'main;
+        } else if ai && !model.curr().cur_blue {
+            // AI move
+
             // Debug: print all moves possible
             if debug {
                 println!("{:?}", list_all_moves(model.curr()));
@@ -37,12 +55,19 @@ pub fn cli(model: &mut Model, ai: bool, reverse: bool, debug: bool) {
                 println!("{:?}", (piece, move_to));
             }
         } else {
+            // Human move
+
+            // Clean the screen
+            if !no_clean && !debug {
+                print!("\x1B[2J\x1B[1;1H");
+            }
+
             // Print map
             print_board(&model.curr().board, true, 1, 0, Vec::new());
 
             // Get which piece to move
             println!(
-                "It's {}'s turn! Please enter piece name.",
+                "It's {}'s turn! Please enter the piece name.",
                 if model.curr().cur_blue { "blue" } else { "red" }
             );
 
@@ -51,7 +76,7 @@ pub fn cli(model: &mut Model, ai: bool, reverse: bool, debug: bool) {
                 println!("{:?}", list_all_moves(model.curr()));
             }
 
-            loop {
+            'input: loop {
                 input.clear();
                 io::stdin().read_line(&mut input).unwrap();
                 input = input.trim().to_string();
@@ -62,7 +87,7 @@ pub fn cli(model: &mut Model, ai: bool, reverse: bool, debug: bool) {
                         .iter()
                         .position(|&x| x == input.as_str())
                         .unwrap() as i32;
-                    break;
+                    break 'input;
                 } else {
                     println!("Wrong input! Please try again");
                 }
@@ -80,14 +105,8 @@ pub fn cli(model: &mut Model, ai: bool, reverse: bool, debug: bool) {
                     moves.iter().filter(|&&x| x < 63).collect(),
                 );
 
-                print!("Legal moves: ");
-                for position in moves.iter().filter(|&&x| x < 63) {
-                    print!("{} ", position);
-                }
-                println!();
-
                 // Get where to move to
-                println!("Please enter move.");
+                println!("Please enter move ([wasd] or [hjkl]).");
                 loop {
                     input.clear();
                     io::stdin().read_line(&mut input).unwrap();
@@ -98,7 +117,7 @@ pub fn cli(model: &mut Model, ai: bool, reverse: bool, debug: bool) {
                         if check_move(model.curr(), piece, move_to) {
                             make_move(model, piece, move_to);
                             println!("Move successful!");
-                            break;
+                            continue 'main;
                         } else {
                             println!("Move illegal! Please try again.");
                         }
@@ -108,6 +127,12 @@ pub fn cli(model: &mut Model, ai: bool, reverse: bool, debug: bool) {
                 }
             } else {
                 // Automatic arrow-key indexing
+
+                // Clean the screen
+                if !no_clean {
+                    print!("\x1B[2J\x1B[1;1H");
+                }
+
                 moves = list_piece_moves(model.curr(), piece);
                 if moves.iter().all(|&x| x > 62) {
                     println!("No moves possible! Please try again.");
@@ -121,22 +146,6 @@ pub fn cli(model: &mut Model, ai: bool, reverse: bool, debug: bool) {
                     0,
                     moves.iter().filter(|&&x| x < 63).collect(),
                 );
-
-                print!("Legal move directions: ");
-                for (i, x) in moves.iter().enumerate() {
-                    if x < &63 {
-                        match i {
-                            0 => print!("H"),
-                            1 => print!("J"),
-                            2 => print!("K"),
-                            3 => print!("L"),
-                            _ => print!("Error"),
-                        }
-                    } else {
-                        print!(" ");
-                    }
-                }
-                println!();
 
                 // Get where to move to
                 println!("Please enter move direction.");
@@ -162,7 +171,7 @@ pub fn cli(model: &mut Model, ai: bool, reverse: bool, debug: bool) {
                         if check_move(model.curr(), piece, move_to) {
                             make_move(model, piece, move_to);
                             println!("Move successful!");
-                            break;
+                            continue 'main;
                         } else {
                             println!("Move illegal! Please try again.");
                         }
