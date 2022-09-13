@@ -126,8 +126,16 @@ pub fn cli(
                     moves.iter().filter(|&&x| x < 63).collect(),
                 );
 
+                print!("Moves: ");
+                for x in moves {
+                    if x < 63 {
+                        print!("{} ", x);
+                    }
+                }
+                println!();
+
                 // Get where to move to
-                println!("Please enter move ([wasd] or [hjkl]).");
+                println!("Please enter move index.");
                 loop {
                     input.clear();
                     io::stdin().read_line(&mut input).unwrap();
@@ -170,12 +178,17 @@ pub fn cli(
                 );
 
                 // Get where to move to
-                println!("Please enter move direction.");
+                println!("Please enter move direction ([wasd] or [hjkl], or [cn] cancel).");
                 loop {
                     input.clear();
                     io::stdin().read_line(&mut input).unwrap();
                     input = input.trim().to_string();
                     if let Some(dir) = accept_arrow(&input) {
+                        // Cancel
+                        if dir == 4 {
+                            break;
+                        }
+
                         move_to = moves[dir];
 
                         if check_move(model.curr(), piece, move_to) {
@@ -222,8 +235,9 @@ fn accept_piece(input: &str) -> Option<i32> {
 }
 
 /// Accepts direction inputs case-insensitively
+/// Accepts `c` and `n` as cancel
 fn accept_arrow(input: &str) -> Option<usize> {
-    if !["w", "a", "s", "d", "h", "j", "k", "l"]
+    if !["w", "a", "s", "d", "h", "j", "k", "l", "c", "n"]
         .contains(&input.to_lowercase().as_str())
     {
         return None;
@@ -234,10 +248,15 @@ fn accept_arrow(input: &str) -> Option<usize> {
         .position(|&x| x == input.to_lowercase().as_str())
     {
         Some(dir)
+    } else if let Some(dir) = ["a", "s", "w", "d"]
+        .iter()
+        .position(|&x| x == input.to_lowercase().as_str())
+    {
+        Some(dir)
+    } else if ["c", "n"].contains(&input.to_lowercase().as_str()) {
+        Some(4)
     } else {
-        ["a", "s", "w", "d"]
-            .iter()
-            .position(|&x| x == input.to_lowercase().as_str())
+        None
     }
 }
 
