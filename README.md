@@ -50,11 +50,11 @@ When pieces step on these special squares, the background
 changes to their piece colour instead.
 
 To move, select a piece by their short form (or full English name),
-then press enter. (Case does not matter)
+then press <kbd>Enter</kbd>. (Case does not matter)
 Then, all the allowed moves will be highlighted in yellow.
 Press one of `[wasd]` (up, left, down, right),
 or one of `[hjkl]` (left, down, up, right),
-then enter, to make the move. (Again, case does not matter)
+then <kbd>Enter</kbd>, to make the move. (Again, case does not matter)
 
 _Note: Why `[hjkl]`?_
 It comes from Vim as the primary arrow keys.
