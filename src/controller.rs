@@ -83,10 +83,10 @@ pub fn check_walk(state: &State, piece: i32, move_to: i32) -> bool {
 
     // Checks if moving into one's own den
     if state.cur_blue {
-        if piece == DEN_BLUE {
+        if move_to == DEN_BLUE {
             return false;
         }
-    } else if piece == DEN_RED {
+    } else if move_to == DEN_RED {
         return false;
     }
 
