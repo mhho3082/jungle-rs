@@ -32,7 +32,7 @@ pub fn check_walk(state: &State, piece: i32, move_to: i32) -> bool {
     };
 
     // Checks if out-of-bounds
-    if original < 0 || move_to < 0 || original > 62 || move_to > 62 {
+    if !(0..=62).contains(&move_to) {
         return false;
     }
 
@@ -59,40 +59,39 @@ pub fn check_walk(state: &State, piece: i32, move_to: i32) -> bool {
         return false;
     }
 
-    // // Checks if illegal horizontal 1-block move (except river move)
-    // let mut river = false;
-    // if (original - move_to).abs() != COL_COUNT {
-    //     if [0, COL_COUNT - 1].contains(&(original % COL_COUNT))
-    //         && [0, COL_COUNT - 1].contains(&(move_to % COL_COUNT))
-    //     {
-    //         return false;
-    //     } else if (original - move_to).abs() != 1 {
-    //         river = true;
-    //     }
-    // }
-    //
-    // let river_moves = [
-    //     (15, 50),
-    //     (16, 51),
-    //     (18, 53),
-    //     (19, 54),
-    //     (21, 24),
-    //     (28, 31),
-    //     (35, 38),
-    //     (24, 27),
-    //     (31, 34),
-    //     (38, 41),
-    // ];
-    // // Checks if non-river moves
-    // if river
-    //     && !river_moves.contains(&(original, move_to))
-    //     && !river_moves.contains(&(move_to, original))
-    // {
-    //     return false;
-    // }
+    // Checks if neither 1-square nor river
+    let mut river = false;
+    let river_moves = [
+        (15, 50),
+        (16, 51),
+        (18, 53),
+        (19, 54),
+        (21, 24),
+        (28, 31),
+        (35, 38),
+        (24, 27),
+        (31, 34),
+        (38, 41),
+    ];
+    if !([1, 7].contains(&(original - move_to).abs())) {
+        if river_moves.contains(&(original, move_to)) || river_moves.contains(&(move_to, original))
+        {
+            river = true;
+        } else {
+            return false;
+        }
+    }
 
-    // TODO:
-    // Check for rat in river
+    // Checks if legal river
+    if river {
+        // Only lion and tiger can jump
+        if ![6, 7].contains(&piece) {
+            return false;
+        }
+
+        // TODO:
+        // Check if rat in (intervening) river
+    }
 
     true
 }
