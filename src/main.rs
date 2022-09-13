@@ -19,11 +19,12 @@ fn main() {
 fn _test_connection() {
     let mut model = Model::new();
 
-    // Should be in controller
-    // btw illegal move XD
+    // Illegal move XD
+    // Blue
     model
         .history
         .push(make_move(model.history.last().unwrap(), 3, 37));
+    // Red
     model
         .history
         .push(make_move(model.history.last().unwrap(), 4, 23));
