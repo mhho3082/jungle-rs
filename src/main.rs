@@ -3,7 +3,7 @@ mod model;
 mod view;
 
 use crate::model::Model;
-use crate::view::{debug_2p, user_2p};
+use crate::view::cli;
 
 use clap::Parser;
 
@@ -13,6 +13,10 @@ struct Args {
     /// Whether to run in debug mode
     #[clap(short, long, value_parser, default_value_t = false)]
     debug: bool,
+
+    /// Whether to let red play first
+    #[clap(short, long, value_parser, default_value_t = false)]
+    reverse: bool,
 }
 
 // The best explanation of the game:
@@ -22,9 +26,5 @@ fn main() {
     let args = Args::parse();
 
     let mut model = Model::new();
-    if args.debug {
-        debug_2p(&mut model);
-    } else {
-        user_2p(&mut model);
-    }
+    cli(&mut model, args.reverse, args.debug);
 }
