@@ -98,8 +98,9 @@ pub fn check_walk(state: &State, piece: i32, move_to: i32) -> bool {
     }
 
     // Checks if cross-border (excpet for mouse)
-    if piece != 0 && (RIVERS.contains(&move_to) && !RIVERS.contains(&original))
-        || (RIVERS.contains(&original) && !RIVERS.contains(&move_to))
+    if piece != 0
+        && ((RIVERS.contains(&move_to) && !RIVERS.contains(&original))
+            || (RIVERS.contains(&original) && !RIVERS.contains(&move_to)))
     {
         return false;
     }
