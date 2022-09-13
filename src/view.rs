@@ -1,4 +1,4 @@
-use crate::model::{Board, COL_COUNT, DENS, RIVERS, TRAPS_BLUE, TRAPS_RED};
+use crate::model::{Board, COL_COUNT, DEN_BLUE, DEN_RED, RIVERS, TRAPS_BLUE, TRAPS_RED};
 
 use colored::Colorize;
 
@@ -33,7 +33,11 @@ pub fn print_board(board: &Board, border: bool, space: i32, indent: i32) {
             if RIVERS.contains(&i) {
                 print!("{}", piece.reversed());
                 was_river = !was_river;
-            } else if TRAPS_BLUE.contains(&i) || TRAPS_RED.contains(&i) || DENS.contains(&i) {
+            } else if TRAPS_BLUE.contains(&i)
+                || TRAPS_RED.contains(&i)
+                || i == DEN_BLUE
+                || i == DEN_RED
+            {
                 print!("{}", piece.reversed());
             } else {
                 print!("{}", piece);
@@ -45,7 +49,11 @@ pub fn print_board(board: &Board, border: bool, space: i32, indent: i32) {
             if RIVERS.contains(&i) {
                 print!("{}", piece.reversed());
                 was_river = !was_river;
-            } else if TRAPS_BLUE.contains(&i) || TRAPS_RED.contains(&i) || DENS.contains(&i) {
+            } else if TRAPS_BLUE.contains(&i)
+                || TRAPS_RED.contains(&i)
+                || i == DEN_BLUE
+                || i == DEN_RED
+            {
                 print!("{}", piece.reversed());
             } else {
                 print!("{}", piece);
@@ -57,7 +65,7 @@ pub fn print_board(board: &Board, border: bool, space: i32, indent: i32) {
             print!("{}", "#".on_cyan());
         } else if TRAPS_RED.contains(&i) {
             print!("{}", "#".on_magenta());
-        } else if DENS.contains(&i) {
+        } else if i == DEN_BLUE || i == DEN_RED {
             print!("{}", "@".reversed());
         } else {
             print!(".");

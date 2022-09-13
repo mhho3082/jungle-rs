@@ -81,5 +81,6 @@ impl Board {
 pub static RIVERS: [i32; 12] = [22, 23, 25, 26, 29, 30, 32, 33, 36, 37, 39, 40];
 pub static TRAPS_BLUE: [i32; 3] = [52, 58, 60];
 pub static TRAPS_RED: [i32; 3] = [2, 4, 10];
-pub static DENS: [i32; 2] = [3, 59];
+pub static DEN_BLUE: i32 = 59;
+pub static DEN_RED: i32 = 3;
 pub static COL_COUNT: i32 = 7;

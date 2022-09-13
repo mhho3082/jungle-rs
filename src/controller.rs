@@ -7,14 +7,14 @@
 // check_move
 // check_win
 // make_move
-// list_all_moves
+// list_moves
 // list_piece_moves
 //
 // possibly also handle history:
 // state_count
 // goto_state
 
-use crate::model::{State, COL_COUNT, DENS, TRAPS_BLUE, TRAPS_RED};
+use crate::model::{State, DEN_BLUE, DEN_RED, RIVERS, TRAPS_BLUE, TRAPS_RED};
 
 pub fn check_move(state: &State, piece: i32, move_to: i32) -> bool {
     check_walk(state, piece, move_to) && check_capture(state, piece, move_to)
@@ -34,37 +34,53 @@ pub fn check_walk(state: &State, piece: i32, move_to: i32) -> bool {
         return false;
     }
 
-    // Checks if illegal horizontal 1-block move (except river move)
-    let mut river = false;
-    if (original - move_to).abs() != COL_COUNT {
-        if [0, COL_COUNT - 1].contains(&(original % COL_COUNT))
-            && [0, COL_COUNT - 1].contains(&(move_to % COL_COUNT))
-        {
+    // Checks if moving into one's own den
+    if state.cur_blue {
+        if piece == DEN_BLUE {
             return false;
-        } else if (original - move_to).abs() != 1 {
-            river = true;
         }
+    } else if piece == DEN_RED {
+        return false;
     }
 
-    let river_moves = [
-        (15, 50),
-        (16, 51),
-        (18, 53),
-        (19, 54),
-        (21, 24),
-        (28, 31),
-        (35, 38),
-        (24, 27),
-        (31, 34),
-        (38, 41),
-    ];
-    // Checks if non-river moves
-    if river
-        && !river_moves.contains(&(original, move_to))
-        && !river_moves.contains(&(move_to, original))
+    // Checks if cross-border (excpet for mouse)
+    if piece != 0 && (RIVERS.contains(&move_to) && !RIVERS.contains(&original))
+        || (RIVERS.contains(&original) && !RIVERS.contains(&move_to))
     {
         return false;
     }
+
+    // // Checks if illegal horizontal 1-block move (except river move)
+    // let mut river = false;
+    // if (original - move_to).abs() != COL_COUNT {
+    //     if [0, COL_COUNT - 1].contains(&(original % COL_COUNT))
+    //         && [0, COL_COUNT - 1].contains(&(move_to % COL_COUNT))
+    //     {
+    //         return false;
+    //     } else if (original - move_to).abs() != 1 {
+    //         river = true;
+    //     }
+    // }
+    //
+    // let river_moves = [
+    //     (15, 50),
+    //     (16, 51),
+    //     (18, 53),
+    //     (19, 54),
+    //     (21, 24),
+    //     (28, 31),
+    //     (35, 38),
+    //     (24, 27),
+    //     (31, 34),
+    //     (38, 41),
+    // ];
+    // // Checks if non-river moves
+    // if river
+    //     && !river_moves.contains(&(original, move_to))
+    //     && !river_moves.contains(&(move_to, original))
+    // {
+    //     return false;
+    // }
 
     // TODO:
     // Check for rat in river
@@ -138,8 +154,8 @@ pub fn make_move(state: &State, piece: i32, move_to: i32) -> State {
 }
 
 pub fn check_win(state: &State) -> bool {
-    state.board.blue.contains(&DENS[0])
-        || state.board.red.contains(&DENS[1])
+    state.board.blue.contains(&DEN_RED)
+        || state.board.red.contains(&DEN_BLUE)
         || state.board.blue.iter().all(|x| x > &62)
         || state.board.red.iter().all(|x| x > &62)
 }
