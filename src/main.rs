@@ -17,6 +17,10 @@ struct Args {
     /// Whether to let red play first
     #[clap(short, long, value_parser, default_value_t = false)]
     reverse: bool,
+
+    /// Whether player red is an AI
+    #[clap(short, long, value_parser, default_value_t = false)]
+    ai: bool,
 }
 
 // The best explanation of the game:
@@ -26,5 +30,5 @@ fn main() {
     let args = Args::parse();
 
     let mut model = Model::new();
-    cli(&mut model, args.reverse, args.debug);
+    cli(&mut model, args.ai, args.reverse, args.debug);
 }

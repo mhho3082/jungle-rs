@@ -2,10 +2,12 @@ use crate::controller::*;
 use crate::model::*;
 
 use colored::Colorize;
+use rand::seq::SliceRandom;
+use rand::thread_rng;
 use std::io;
 
 /// The CLI-based user loop
-pub fn cli(model: &mut Model, reverse: bool, debug: bool) {
+pub fn cli(model: &mut Model, ai: bool, reverse: bool, debug: bool) {
     let mut input = String::new();
 
     let mut piece: i32;
@@ -17,138 +19,156 @@ pub fn cli(model: &mut Model, reverse: bool, debug: bool) {
         model.history[0].cur_blue = false;
     }
 
+    let mut rng = thread_rng();
+
     loop {
-        // Print map
-        print_board(&model.curr().board, true, 1, 0, Vec::new());
-
-        // Get which piece to move
-        println!(
-            "{}'s turn! Please enter piece name.",
-            if model.curr().cur_blue { "Blue" } else { "Red" }
-        );
-
-        // Debug: print all moves possible
-        if debug {
-            println!("{:?}", list_all_moves(model.curr()));
-        }
-
-        loop {
-            input.clear();
-            io::stdin().read_line(&mut input).unwrap();
-            input = input.trim().to_string();
-            if ["r", "c", "d", "w", "o", "t", "l", "e"]
-                .contains(&input.as_str())
-            {
-                piece = ["r", "c", "d", "w", "o", "t", "l", "e"]
-                    .iter()
-                    .position(|&x| x == input.as_str())
-                    .unwrap() as i32;
-                break;
-            } else {
-                println!("Wrong input! Please try again");
+        if ai && !model.curr().cur_blue {
+            // Debug: print all moves possible
+            if debug {
+                println!("{:?}", list_all_moves(model.curr()));
             }
-        }
 
-        if debug {
-            // Manual input of square index
-            moves = list_piece_moves(model.curr(), piece);
+            let all_moves = list_all_moves(model.curr());
+            let (piece, move_to) = all_moves.choose(&mut rng).unwrap();
 
-            print_board(
-                &model.curr().board,
-                true,
-                1,
-                0,
-                moves.iter().filter(|&&x| x < 63).collect(),
-            );
+            make_move(model, *piece, *move_to);
 
-            print!("Legal moves: ");
-            for position in moves.iter().filter(|&&x| x < 63) {
-                print!("{} ", position);
-            }
-            println!();
-
-            // Get where to move to
-            println!("Please enter move.");
-            loop {
-                input.clear();
-                io::stdin().read_line(&mut input).unwrap();
-                input = input.trim().to_string();
-                if let Ok(ok) = input.parse::<i32>() {
-                    move_to = ok;
-
-                    if check_move(model.curr(), piece, move_to) {
-                        make_move(model, piece, move_to);
-                        println!("Move successful!");
-                        break;
-                    } else {
-                        println!("Move illegal! Please try again.");
-                    }
-                } else {
-                    println!("Wrong input! Please try again");
-                }
+            if debug {
+                println!("{:?}", (piece, move_to));
             }
         } else {
-            // Automatic arrow-key indexing
-            moves = list_piece_moves(model.curr(), piece);
-            if moves.iter().all(|&x| x > 62) {
-                println!("No moves possible! Please try again.");
-                continue;
-            }
+            // Print map
+            print_board(&model.curr().board, true, 1, 0, Vec::new());
 
-            print_board(
-                &model.curr().board,
-                true,
-                1,
-                0,
-                moves.iter().filter(|&&x| x < 63).collect(),
+            // Get which piece to move
+            println!(
+                "It's {}'s turn! Please enter piece name.",
+                if model.curr().cur_blue { "blue" } else { "red" }
             );
 
-            print!("Legal move directions: ");
-            for (i, x) in moves.iter().enumerate() {
-                if x < &63 {
-                    match i {
-                        0 => print!("H"),
-                        1 => print!("J"),
-                        2 => print!("K"),
-                        3 => print!("L"),
-                        _ => print!("Error"),
-                    }
-                } else {
-                    print!(" ");
-                }
+            // Debug: print all moves possible
+            if debug {
+                println!("{:?}", list_all_moves(model.curr()));
             }
-            println!();
 
-            // Get where to move to
-            println!("Please enter move direction.");
             loop {
                 input.clear();
                 io::stdin().read_line(&mut input).unwrap();
                 input = input.trim().to_string();
-                if ["w", "a", "s", "d", "h", "j", "k", "l"]
+                if ["r", "c", "d", "w", "o", "t", "l", "e"]
                     .contains(&input.as_str())
                 {
-                    if let Some(dir) = ["h", "j", "k", "l"]
+                    piece = ["r", "c", "d", "w", "o", "t", "l", "e"]
                         .iter()
                         .position(|&x| x == input.as_str())
-                    {
-                        move_to = moves[dir];
-                    } else if let Some(dir) = ["a", "s", "w", "d"]
-                        .iter()
-                        .position(|&x| x == input.as_str())
-                    {
-                        move_to = moves[dir];
-                    }
-
-                    if check_move(model.curr(), piece, move_to) {
-                        make_move(model, piece, move_to);
-                        println!("Move successful!");
-                        break;
-                    } else {
-                        println!("Move illegal! Please try again.");
-                    }
+                        .unwrap() as i32;
+                    break;
                 } else {
                     println!("Wrong input! Please try again");
+                }
+            }
+
+            if debug {
+                // Manual input of square index
+                moves = list_piece_moves(model.curr(), piece);
+
+                print_board(
+                    &model.curr().board,
+                    true,
+                    1,
+                    0,
+                    moves.iter().filter(|&&x| x < 63).collect(),
+                );
+
+                print!("Legal moves: ");
+                for position in moves.iter().filter(|&&x| x < 63) {
+                    print!("{} ", position);
+                }
+                println!();
+
+                // Get where to move to
+                println!("Please enter move.");
+                loop {
+                    input.clear();
+                    io::stdin().read_line(&mut input).unwrap();
+                    input = input.trim().to_string();
+                    if let Ok(ok) = input.parse::<i32>() {
+                        move_to = ok;
+
+                        if check_move(model.curr(), piece, move_to) {
+                            make_move(model, piece, move_to);
+                            println!("Move successful!");
+                            break;
+                        } else {
+                            println!("Move illegal! Please try again.");
+                        }
+                    } else {
+                        println!("Wrong input! Please try again");
+                    }
+                }
+            } else {
+                // Automatic arrow-key indexing
+                moves = list_piece_moves(model.curr(), piece);
+                if moves.iter().all(|&x| x > 62) {
+                    println!("No moves possible! Please try again.");
+                    continue;
+                }
+
+                print_board(
+                    &model.curr().board,
+                    true,
+                    1,
+                    0,
+                    moves.iter().filter(|&&x| x < 63).collect(),
+                );
+
+                print!("Legal move directions: ");
+                for (i, x) in moves.iter().enumerate() {
+                    if x < &63 {
+                        match i {
+                            0 => print!("H"),
+                            1 => print!("J"),
+                            2 => print!("K"),
+                            3 => print!("L"),
+                            _ => print!("Error"),
+                        }
+                    } else {
+                        print!(" ");
+                    }
+                }
+                println!();
+
+                // Get where to move to
+                println!("Please enter move direction.");
+                loop {
+                    input.clear();
+                    io::stdin().read_line(&mut input).unwrap();
+                    input = input.trim().to_string();
+                    if ["w", "a", "s", "d", "h", "j", "k", "l"]
+                        .contains(&input.as_str())
+                    {
+                        if let Some(dir) = ["h", "j", "k", "l"]
+                            .iter()
+                            .position(|&x| x == input.as_str())
+                        {
+                            move_to = moves[dir];
+                        } else if let Some(dir) = ["a", "s", "w", "d"]
+                            .iter()
+                            .position(|&x| x == input.as_str())
+                        {
+                            move_to = moves[dir];
+                        }
+
+                        if check_move(model.curr(), piece, move_to) {
+                            make_move(model, piece, move_to);
+                            println!("Move successful!");
+                            break;
+                        } else {
+                            println!("Move illegal! Please try again.");
+                        }
+                    } else {
+                        println!("Wrong input! Please try again");
+                    }
                 }
             }
         }
