@@ -30,6 +30,36 @@ So, to get the list of flags:
 cargo run -- -h
 ```
 
+## How to play
+
+Please play in a terminal emulator that supports `truecolor`,
+or at least ANSI escape sequences; else you will see a lot of
+weird inputs and errors. It is advised that you play with your
+terminal emulator running in "dark mode" of some sort, i.e.,
+your background is dark, and your text is white by default.
+
+On the board, the pieces are labelled as their short forms.
+The short form is the name's first letter, except for leopard,
+which has a short form of `O`. They are labelled by their colour,
+blue or red.
+
+The rivers are marked with a background of green,
+the traps are marked light blue and light red,
+and the dens are marked white (or your text colour).
+When pieces step on these special squares, the background
+changes to their piece colour instead.
+
+To move, select a piece by their short form (or full English name),
+then press enter. (Case does not matter)
+Then, all the allowed moves will be highlighted in yellow.
+Press one of `[wasd]` (up, left, down, right),
+or one of `[hjkl]` (left, down, up, right),
+then enter, to make the move. (Again, case does not matter)
+
+_Note: Why `[hjkl]`?_
+It comes from Vim as the primary arrow keys.
+I use Neovim, so I find it rather ergonomic for me.
+
 ## Compile
 
 Just run the following line:
@@ -91,9 +121,8 @@ The architecture for time machines are all provided
 in the model; someone just needs to hook to the
 `model.current` value to scaffold a time machine.
 (Yup, just change that value and refresh, and it will all work.)
-If we don't really need a time machine,
-then we can instead simplify `model.current` away...
-or not. Not having to type `model.history.last().unwrap()`
+Even if we don't really need a time machine,
+not having to type `model.history.last().unwrap()`
 every time is quite nice.
 
 **Unit tests**
