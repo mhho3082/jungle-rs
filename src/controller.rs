@@ -20,6 +20,11 @@ pub fn list_piece_moves(state: &State, piece: i32) -> [i32; 4] {
 
     let mut out = [63; 4];
 
+    // If dead already
+    if original > 62 {
+        return out;
+    }
+
     // Find one-step moves
     for (i, e) in [-1, 7, -7, 1].iter().enumerate() {
         if check_move(state, piece, original + e) {
@@ -53,14 +58,6 @@ pub fn list_all_moves(state: &State) -> Vec<(i32, i32)> {
     let mut out = Vec::new();
 
     for piece in 0..8 {
-        if state.cur_blue {
-            if state.board.blue[piece as usize] > 63 {
-                continue;
-            }
-        } else if state.board.red[piece as usize] > 63 {
-            continue;
-        }
-
         for move_to in list_piece_moves(state, piece) {
             if move_to < 63 {
                 out.push((piece, move_to));
