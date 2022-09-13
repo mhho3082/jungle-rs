@@ -20,9 +20,15 @@ fn _test_connection() {
 
     // Should be in controller
     {
-        let mut state = model.history[0];
-        state.board.blue[0] -= 1;
+        let mut state = *model.history.last().unwrap();
+        state.board.blue[0] = 22;
         state.next_blue = false;
+        model.history.push(state);
+    }
+    {
+        let mut state = *model.history.last().unwrap();
+        state.board.red[0] = 23;
+        state.next_blue = true;
         model.history.push(state);
     }
 

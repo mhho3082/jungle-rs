@@ -7,6 +7,8 @@ use colored::Colorize;
 pub fn print_board(board: &Board, border: bool, space: i32, indent: i32) {
     let pieces = ["R", "C", "D", "W", "O", "T", "L", "E"];
 
+    let mut was_river = false;
+
     // Print and add borders
     if border {
         println!(
@@ -23,12 +25,31 @@ pub fn print_board(board: &Board, border: bool, space: i32, indent: i32) {
         // Find and print correct square type
         if board.blue.contains(&i) {
             let index = board.blue.iter().position(|&x| x == i).unwrap();
-            print!("{}", pieces[index].blue());
+            let piece = pieces[index].blue();
+
+            if RIVERS.contains(&i) {
+                print!("{}", piece.reversed());
+                was_river = !was_river;
+            } else if TRAPS_BLUE.contains(&i) || TRAPS_RED.contains(&i) || DENS.contains(&i) {
+                print!("{}", piece.reversed());
+            } else {
+                print!("{}", piece);
+            }
         } else if board.red.contains(&i) {
             let index = board.red.iter().position(|&x| x == i).unwrap();
-            print!("{}", pieces[index].red());
+            let piece = pieces[index].red();
+
+            if RIVERS.contains(&i) {
+                print!("{}", piece.reversed());
+                was_river = !was_river;
+            } else if TRAPS_BLUE.contains(&i) || TRAPS_RED.contains(&i) || DENS.contains(&i) {
+                print!("{}", piece.reversed());
+            } else {
+                print!("{}", piece);
+            }
         } else if RIVERS.contains(&i) {
-            print!("{}", "~".on_bright_blue());
+            print!("{}", "~".on_green());
+            was_river = !was_river;
         } else if TRAPS_BLUE.contains(&i) {
             print!("{}", "#".on_cyan());
         } else if TRAPS_RED.contains(&i) {
@@ -44,6 +65,8 @@ pub fn print_board(board: &Board, border: bool, space: i32, indent: i32) {
                 print!("|");
             }
             println!();
+        } else if was_river {
+            print!("{}", " ".repeat(space as usize).on_green());
         } else {
             print!("{}", " ".repeat(space as usize));
         }
