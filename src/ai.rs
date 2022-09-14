@@ -67,15 +67,15 @@ pub fn _ai_naive_aggressive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
             return **attack_moves.choose(rng).unwrap();
         } else if state.cur_blue {
             // Find farthest move (blue)
-            let mut farthest: i32 = 63;
+            let mut farthest: i32 = 10;
             for (_, y) in &all_moves {
-                if y < &farthest {
-                    farthest = *y;
+                if (y / 7) < farthest {
+                    farthest = y / 7;
                 }
             }
             return **all_moves
                 .iter()
-                .filter(|(_, y)| y == &farthest)
+                .filter(|(_, y)| (y / 7) == farthest)
                 .collect::<Vec<&(i32, i32)>>()
                 .choose(rng)
                 .unwrap();
@@ -83,13 +83,13 @@ pub fn _ai_naive_aggressive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
             // Find farthest move (red)
             let mut farthest: i32 = 0;
             for (_, y) in &all_moves {
-                if y > &farthest {
-                    farthest = *y;
+                if (y / 7) > farthest {
+                    farthest = y / 7;
                 }
             }
             return **all_moves
                 .iter()
-                .filter(|(_, y)| y == &farthest)
+                .filter(|(_, y)| (y / 7) == farthest)
                 .collect::<Vec<&(i32, i32)>>()
                 .choose(rng)
                 .unwrap();
