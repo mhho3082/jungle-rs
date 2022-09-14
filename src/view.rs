@@ -61,7 +61,7 @@ pub fn cli(
 
             // Using naive algorithm
             // See `ai.rs` for all algorithms
-            (piece, move_to) = _ai_naive_aggressive(model.curr(), &mut rng);
+            (piece, move_to) = _ai_naive_neutral(model.curr(), &mut rng);
 
             make_move(model, piece, move_to);
 
