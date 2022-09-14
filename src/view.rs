@@ -48,7 +48,11 @@ pub fn cli(
             // Congratulate win and stop the loop
             println!(
                 "{} won! Congratulations!",
-                if model.curr().cur_blue { "Red" } else { "Blue" }
+                if model.curr().cur_blue {
+                    "Red".red()
+                } else {
+                    "Blue".blue()
+                }
             );
             break 'main;
         } else if ai && !model.curr().cur_blue {
@@ -90,7 +94,11 @@ pub fn cli(
             // Get which piece to move
             println!(
                 "It's {}'s turn! Please enter the piece name.",
-                if model.curr().cur_blue { "blue" } else { "red" }
+                if model.curr().cur_blue {
+                    "blue".blue()
+                } else {
+                    "red".red()
+                }
             );
 
             // Debug: print all moves possible
