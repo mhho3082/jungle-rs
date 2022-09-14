@@ -104,9 +104,15 @@ pub fn cli(
                 input = input.trim().to_string();
                 if let Some(index) = accept_piece(&input) {
                     piece = index;
-                    break 'input;
+                    moves = list_piece_moves(model.curr(), piece);
+                    if moves.iter().all(|&x| x > 62) {
+                        println!("No moves possible! Please try again.");
+                        continue 'input;
+                    } else {
+                        break 'input;
+                    }
                 } else {
-                    println!("Wrong input! Please try again");
+                    println!("Wrong input! Please try again.");
                 }
             }
 
@@ -148,7 +154,7 @@ pub fn cli(
                             println!("Move illegal! Please try again.");
                         }
                     } else {
-                        println!("Wrong input! Please try again");
+                        println!("Wrong input! Please try again.");
                     }
                 }
             } else {
@@ -157,12 +163,6 @@ pub fn cli(
                 // Clean the screen
                 if !no_clean {
                     print!("\x1B[2J\x1B[1;1H");
-                }
-
-                moves = list_piece_moves(model.curr(), piece);
-                if moves.iter().all(|&x| x > 62) {
-                    println!("No moves possible! Please try again.");
-                    continue;
                 }
 
                 print_board(
@@ -196,7 +196,7 @@ pub fn cli(
                             println!("Move illegal! Please try again.");
                         }
                     } else {
-                        println!("Wrong input! Please try again");
+                        println!("Wrong input! Please try again.");
                     }
                 }
             }
