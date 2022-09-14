@@ -98,7 +98,7 @@ pub fn cli(
                 &model.curr().board,
                 model.current,
                 true,
-                1,
+                3,
                 0,
                 Vec::new(),
             );
@@ -293,7 +293,7 @@ pub fn print_board(
 
     println!(
         "{}    Step {}",
-        " ".repeat((indent + space / 2) as usize),
+        " ".repeat((indent + space * 2) as usize),
         step + 1
     );
 
