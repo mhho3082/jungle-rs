@@ -14,7 +14,8 @@ cd jungle-rs
 cargo run
 ```
 
-This will take quite some time to compile (mainly the libraries), then it should run smoothly.
+This will take quite some time to compile (mainly the libraries) for the first time,
+then it should run smoothly.
 
 If this runs too slowly (in runtime, not compile time) for some reason, try adding the `--release` flag.
 
