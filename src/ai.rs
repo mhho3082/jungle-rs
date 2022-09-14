@@ -125,20 +125,22 @@ pub fn _ai_naive_neutral(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
         if !attack_moves.is_empty() {
             return **attack_moves.choose(rng).unwrap();
         } else if state.cur_blue {
-            // Find farthest move (blue)
+            // Generate distribution
             let dist_base = all_moves
                 .iter()
                 .map(|(_, y)| (10 - (y % 7)))
                 .collect::<Vec<i32>>();
             let dist = WeightedIndex::new(&dist_base).unwrap();
 
+            // Randomize move
             all_moves[dist.sample(rng)]
         } else {
-            // Find farthest move (blue)
+            // Generate distribution
             let dist_base =
                 all_moves.iter().map(|(_, y)| y % 7).collect::<Vec<i32>>();
             let dist = WeightedIndex::new(&dist_base).unwrap();
 
+            // Randomize move
             all_moves[dist.sample(rng)]
         }
     }
