@@ -201,8 +201,8 @@ pub fn find_capture(state: &State, move_to: i32) -> bool {
     }
 }
 
-/// Assumes that the move is legal already
-/// Returns a new state where the move is made
+/// Makes a given move
+/// assumes that the move is legal already
 pub fn make_move(model: &mut Model, piece: i32, move_to: i32) {
     let mut state = *model.curr();
 
