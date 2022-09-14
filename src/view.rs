@@ -1,8 +1,8 @@
+use crate::ai::ai_random;
 use crate::controller::*;
 use crate::model::*;
 
 use colored::Colorize;
-use rand::seq::SliceRandom;
 use rand::thread_rng;
 use std::io;
 
@@ -61,13 +61,13 @@ pub fn cli(
                 println!("{:?}", list_all_moves(model.curr()));
             }
 
-            let all_moves = list_all_moves(model.curr());
-            let (piece, move_to) = all_moves.choose(&mut rng).unwrap();
+            (piece, move_to) = ai_random(model.curr(), &mut rng);
 
-            make_move(model, *piece, *move_to);
+            make_move(model, piece, move_to);
 
+            // Debug: print move made
             if debug {
-                println!("{:?}", (piece, move_to));
+                println!("AI move: {:?}", (piece, move_to));
             }
         } else {
             // Human move

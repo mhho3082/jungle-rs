@@ -1,3 +1,4 @@
+mod ai;
 mod controller;
 mod model;
 mod view;
