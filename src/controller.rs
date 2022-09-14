@@ -130,7 +130,7 @@ pub fn check_walk(state: &State, piece: i32, move_to: i32) -> bool {
                 return false;
             }
         } else if let Some(leap) =
-            RIVER_MOVES.iter().position(|&x| x == [original, move_to])
+            RIVER_MOVES.iter().position(|&x| x == [move_to, original])
         {
             if RIVER_LEAPS[leap].contains(&state.board.blue[0])
                 || RIVER_LEAPS[leap].contains(&state.board.red[0])
