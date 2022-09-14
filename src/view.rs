@@ -63,8 +63,6 @@ pub fn cli(
                 println!("{:?}", list_all_moves(model.curr()));
             }
 
-            // Using naive algorithm
-            // See `ai.rs` for all algorithms
             (piece, move_to) = match ai {
                 AIType::Random | AIType::Null => {
                     ai_random(model.curr(), &mut rng)
