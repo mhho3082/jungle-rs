@@ -63,6 +63,7 @@ pub fn cli(
                 println!("{:?}", list_all_moves(model.curr()));
             }
 
+            // Pick algorithm
             (piece, move_to) = match ai {
                 AIType::Random | AIType::Null => {
                     ai_random(model.curr(), &mut rng)
