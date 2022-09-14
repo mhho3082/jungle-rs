@@ -4,6 +4,7 @@ mod model;
 mod view;
 
 use crate::{model::Model, view::cli};
+use ai::AIType;
 use clap::Parser;
 
 #[derive(Parser, Debug)]
@@ -18,8 +19,8 @@ struct Args {
     reverse: bool,
 
     /// Whether player red is an AI
-    #[clap(short, long, value_parser, default_value_t = false)]
-    ai: bool,
+    #[clap(short, long, value_enum, default_value_t = AIType::Null)]
+    ai: AIType,
 
     /// Whether not to clean the screen after each input
     /// Always off in debug mode

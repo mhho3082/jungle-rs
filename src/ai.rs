@@ -8,6 +8,15 @@ use rand::{
     seq::SliceRandom,
 };
 
+#[derive(clap::ValueEnum, Clone, Debug, PartialEq, Eq)]
+pub enum AIType {
+    Null,
+    Random,
+    NaiveDefensive,
+    NaiveNeutral,
+    NaiveAggressive,
+}
+
 pub fn _ai_random(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
     *list_all_moves(state).choose(rng).unwrap()
 }

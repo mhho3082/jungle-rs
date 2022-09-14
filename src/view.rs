@@ -10,7 +10,7 @@ use std::io;
 /// The CLI-based user loop
 pub fn cli(
     model: &mut Model,
-    ai: bool,
+    ai: AIType,
     reverse: bool,
     debug: bool,
     no_clean: bool,
@@ -55,7 +55,7 @@ pub fn cli(
                 }
             );
             break 'main;
-        } else if ai && !model.curr().cur_blue {
+        } else if ai != AIType::Null && !model.curr().cur_blue {
             // AI move
 
             // Debug: print all moves possible
@@ -65,7 +65,20 @@ pub fn cli(
 
             // Using naive algorithm
             // See `ai.rs` for all algorithms
-            (piece, move_to) = _ai_naive_neutral(model.curr(), &mut rng);
+            (piece, move_to) = match ai {
+                AIType::Random | AIType::Null => {
+                    _ai_random(model.curr(), &mut rng)
+                }
+                AIType::NaiveDefensive => {
+                    _ai_naive_defensive(model.curr(), &mut rng)
+                }
+                AIType::NaiveNeutral => {
+                    _ai_naive_neutral(model.curr(), &mut rng)
+                }
+                AIType::NaiveAggressive => {
+                    _ai_naive_aggressive(model.curr(), &mut rng)
+                }
+            };
 
             make_move(model, piece, move_to);
 
