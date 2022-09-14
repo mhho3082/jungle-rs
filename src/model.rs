@@ -66,7 +66,7 @@ impl State {
 /// as their index (0..=62)
 /// If stored as 63: captured
 /// Can be formatted as R C D W O T L E
-///                             ^- leopard
+/// .                           ^- leopard
 ///
 /// Blue is at bottom (as default player 1)
 #[derive(Debug, Clone, Copy)]
