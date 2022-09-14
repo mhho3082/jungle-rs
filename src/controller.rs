@@ -59,6 +59,7 @@ pub fn list_all_moves(state: &State) -> Vec<(i32, i32)> {
     out
 }
 
+/// Checks if a move is legal
 pub fn check_move(state: &State, piece: i32, move_to: i32) -> bool {
     check_walk(state, piece, move_to) && check_capture(state, piece, move_to)
 }
@@ -230,6 +231,7 @@ pub fn make_move(model: &mut Model, piece: i32, move_to: i32) {
     model.current += 1;
 }
 
+/// Checks if a winning condition is reached in a state
 pub fn check_win(state: &State) -> bool {
     state.board.blue.contains(&DEN_RED)
         || state.board.red.contains(&DEN_BLUE)

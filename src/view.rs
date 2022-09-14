@@ -15,12 +15,15 @@ pub fn cli(
     debug: bool,
     no_clean: bool,
 ) {
+    // The UI variables
     let border = true;
     let spaces = 1;
     let indent = 0;
 
+    // User input
     let mut input = String::new();
 
+    // Movement variables
     let mut piece: i32;
     let mut move_to: i32;
     let mut moves: [i32; 4];
@@ -30,6 +33,7 @@ pub fn cli(
         model.history[0].cur_blue = false;
     }
 
+    // Prepare RNG for AI
     let mut rng = thread_rng();
 
     'main: loop {
@@ -83,6 +87,7 @@ pub fn cli(
                 }
             };
 
+            // Make the move
             make_move(model, piece, move_to);
 
             // Debug: print move made
@@ -97,7 +102,7 @@ pub fn cli(
                 print!("\x1B[2J\x1B[1;1H");
             }
 
-            // Print map
+            // Print the map
             print_board(
                 &model.curr().board,
                 model.current,
@@ -122,12 +127,17 @@ pub fn cli(
                 println!("{:?}", list_all_moves(model.curr()));
             }
 
+            // The input loop for which piece to move
             'input: loop {
                 input.clear();
                 io::stdin().read_line(&mut input).unwrap();
                 input = input.trim().to_string();
+
+                // Check if the piece input is correct
                 if let Some(index) = accept_piece(&input) {
                     piece = index;
+
+                    // Check if there are any moves for this piece
                     moves = list_piece_moves(model.curr(), piece);
                     if moves.iter().all(|&x| x > 62) {
                         println!("No moves possible! Please try again.");
@@ -142,8 +152,8 @@ pub fn cli(
 
             if debug {
                 // Manual input of square index
-                moves = list_piece_moves(model.curr(), piece);
 
+                // Print the board
                 print_board(
                     &model.curr().board,
                     model.current,
@@ -153,6 +163,7 @@ pub fn cli(
                     moves.iter().filter(|&&x| x < 63).collect(),
                 );
 
+                // List the moves
                 print!("Moves: ");
                 for x in moves {
                     if x < 63 {
@@ -316,6 +327,8 @@ pub fn print_board(
         }
         println!();
     }
+
+    // Print for every square
     for i in 0..63 {
         if i % COL_COUNT == 0 {
             print!("{}", " ".repeat(indent as usize));

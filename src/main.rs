@@ -1,12 +1,17 @@
+// Connect other source files to the application
 mod ai;
 mod controller;
 mod model;
 mod view;
 
+// Imports (or includes)
+// `crate` refers to the whole application
 use crate::{model::Model, view::cli};
 use ai::AIType;
 use clap::Parser;
 
+// Just a simple list of arguments for the `clap` library
+// `derive` and the `#[...]` are just macros
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 struct Args {
@@ -31,9 +36,12 @@ struct Args {
 // The best explanation of the game:
 // https://en.wikipedia.org/wiki/Jungle_(board_game)
 
+// The entry point
 fn main() {
+    // Parse the arguments
     let args = Args::parse();
 
+    // Launch the user loop
     let mut model = Model::new();
     cli(&mut model, args.ai, args.reverse, args.debug, args.no_clean);
 }

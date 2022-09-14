@@ -17,6 +17,7 @@ pub enum AIType {
     NaiveAggressive,
 }
 
+/// Randomly pick a move
 pub fn ai_random(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
     *list_all_moves(state).choose(rng).unwrap()
 }
