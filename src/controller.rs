@@ -183,13 +183,12 @@ pub fn check_capture(state: &State, piece: i32, move_to: i32) -> bool {
     }
 
     // Check capture
-    println!("{} -> {}", piece, enemy);
-    if piece >= enemy || piece == 0 && enemy == 7 {
+    if piece >= enemy || (piece == 0 && enemy == 7) {
         true
     } else if state.cur_blue {
-        TRAPS_BLUE.contains(&enemy)
+        TRAPS_BLUE.contains(&move_to)
     } else {
-        TRAPS_RED.contains(&enemy)
+        TRAPS_RED.contains(&move_to)
     }
 }
 
