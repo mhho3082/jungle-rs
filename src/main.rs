@@ -23,7 +23,7 @@ struct Args {
     ai: AIType,
 
     /// Whether not to clean the screen after each input
-    /// Always off in debug mode
+    /// (always off in debug mode)
     #[clap(short, long, value_parser, default_value_t = false)]
     no_clean: bool,
 }
