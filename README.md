@@ -84,16 +84,16 @@ to install `rustup`, then install the stable toolchain:
 Rustup toolchain install stable
 ```
 
+If you want to learn Rust (say, for fun, like me),
+I would like to refer you to
+[the Rust Book](https://doc.rust-lang.org/book/),
+which I have found really helpful.
+
 ## Get lines of code
 
 ```bash
 find --file rs | xargs cat | wc -l
 ```
-
-If you want to learn Rust (say, for fun, like me),
-I would like to refer you to
-[the Rust Book](https://doc.rust-lang.org/book/),
-which I have found really helpful.
 
 ## What could be done better
 
