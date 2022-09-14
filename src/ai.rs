@@ -1,6 +1,6 @@
 use crate::{
     controller::{find_capture, list_all_moves},
-    model::{State, DEN_BLUE, DEN_RED},
+    model::{State, COL_COUNT, DEN_BLUE, DEN_RED},
 };
 
 use rand::{
@@ -74,13 +74,13 @@ pub fn _ai_naive_aggressive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
             // Find farthest move (blue)
             let mut farthest: i32 = 10;
             for (_, y) in &all_moves {
-                if (y / 7) < farthest {
-                    farthest = y / 7;
+                if (y / COL_COUNT) < farthest {
+                    farthest = y / COL_COUNT;
                 }
             }
             **all_moves
                 .iter()
-                .filter(|(_, y)| (y / 7) == farthest)
+                .filter(|(_, y)| (y / COL_COUNT) == farthest)
                 .collect::<Vec<&(i32, i32)>>()
                 .choose(rng)
                 .unwrap()
@@ -88,13 +88,13 @@ pub fn _ai_naive_aggressive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
             // Find farthest move (red)
             let mut farthest: i32 = 0;
             for (_, y) in &all_moves {
-                if (y / 7) > farthest {
-                    farthest = y / 7;
+                if (y / COL_COUNT) > farthest {
+                    farthest = y / COL_COUNT;
                 }
             }
             **all_moves
                 .iter()
-                .filter(|(_, y)| (y / 7) == farthest)
+                .filter(|(_, y)| (y / COL_COUNT) == farthest)
                 .collect::<Vec<&(i32, i32)>>()
                 .choose(rng)
                 .unwrap()
@@ -131,7 +131,7 @@ pub fn _ai_naive_neutral(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
             // Generate distribution
             let dist_base = all_moves
                 .iter()
-                .map(|(_, y)| (10 - (y % 7)))
+                .map(|(_, y)| (10 - (y / COL_COUNT)))
                 .collect::<Vec<i32>>();
             let dist = WeightedIndex::new(&dist_base).unwrap();
 
@@ -139,8 +139,10 @@ pub fn _ai_naive_neutral(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
             all_moves[dist.sample(rng)]
         } else {
             // Generate distribution
-            let dist_base =
-                all_moves.iter().map(|(_, y)| y % 7).collect::<Vec<i32>>();
+            let dist_base = all_moves
+                .iter()
+                .map(|(_, y)| y / COL_COUNT)
+                .collect::<Vec<i32>>();
             let dist = WeightedIndex::new(&dist_base).unwrap();
 
             // Randomize move
