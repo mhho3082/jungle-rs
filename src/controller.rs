@@ -29,8 +29,9 @@ pub fn list_piece_moves(state: &State, piece: i32) -> [i32; 4] {
                 for x in RIVER_MOVES {
                     if x.contains(&original) {
                         let temp = x.iter().filter(|y| y != &&original).sum();
-                        if (e < &0 && temp < original)
-                            || (e > &0 && temp > original)
+                        if ((e < &0 && temp < original)
+                            || (e > &0 && temp > original))
+                            && check_move(state, piece, temp)
                         {
                             out[i] = temp;
                         }
