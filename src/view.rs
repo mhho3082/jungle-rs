@@ -98,7 +98,7 @@ pub fn cli(
                 &model.curr().board,
                 model.current,
                 true,
-                3,
+                1,
                 0,
                 Vec::new(),
             );
