@@ -1,4 +1,5 @@
-use crate::ai::ai_random;
+use crate::ai::_ai_naive;
+use crate::ai::_ai_random;
 use crate::controller::*;
 use crate::model::*;
 
@@ -61,7 +62,7 @@ pub fn cli(
                 println!("{:?}", list_all_moves(model.curr()));
             }
 
-            (piece, move_to) = ai_random(model.curr(), &mut rng);
+            (piece, move_to) = _ai_naive(model.curr(), &mut rng);
 
             make_move(model, piece, move_to);
 

@@ -183,12 +183,23 @@ pub fn check_capture(state: &State, piece: i32, move_to: i32) -> bool {
     }
 
     // Check capture
+    println!("{} -> {}", piece, enemy);
     if piece >= enemy || piece == 0 && enemy == 7 {
         true
     } else if state.cur_blue {
         TRAPS_BLUE.contains(&enemy)
     } else {
         TRAPS_RED.contains(&enemy)
+    }
+}
+
+/// Checks that a capture can be made (for AI)
+/// Assumes that the capture, if any, is legal
+pub fn find_capture(state: &State, move_to: i32) -> bool {
+    if state.cur_blue {
+        state.board.red.contains(&move_to)
+    } else {
+        state.board.blue.contains(&move_to)
     }
 }
 
