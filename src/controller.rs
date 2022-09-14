@@ -168,19 +168,26 @@ pub fn check_capture(state: &State, piece: i32, move_to: i32) -> bool {
         return true;
     }
 
+    // Get original location
+    let original = if state.cur_blue {
+        state.board.blue[piece as usize]
+    } else {
+        state.board.red[piece as usize]
+    };
+
+    // Check if cross-border capture
+    if (RIVERS.contains(&move_to) && !RIVERS.contains(&original))
+        || (RIVERS.contains(&original) && !RIVERS.contains(&move_to))
+    {
+        return false;
+    }
+
     // Get enemy piece
     let enemy = if state.cur_blue {
         state.board.red.iter().position(|&x| x == move_to).unwrap() as i32
     } else {
         state.board.blue.iter().position(|&x| x == move_to).unwrap() as i32
     };
-
-    // Check if cross-border
-    if (RIVERS.contains(&move_to) && !RIVERS.contains(&enemy))
-        || (RIVERS.contains(&enemy) && !RIVERS.contains(&move_to))
-    {
-        return false;
-    }
 
     // Check capture
     if piece >= enemy || (piece == 0 && enemy == 7) {
