@@ -1,8 +1,8 @@
 // Note:
 // Since many of the arrays we use here
 // already have their lengths fixed,
-// we use rust arrays `[x; n]`
-// instead of vectors `vec![x; n]` for them.
+// we use arrays `[T; n]`
+// instead of vectors `Vec<T>` for them.
 // They function (mostly) the same,
 // and we get some nice compiler checks.
 //
