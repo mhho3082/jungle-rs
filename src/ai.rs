@@ -1,9 +1,9 @@
-use rand::{rngs::ThreadRng, seq::SliceRandom};
-
 use crate::{
     controller::{find_capture, list_all_moves},
     model::{State, DEN_BLUE, DEN_RED},
 };
+
+use rand::{rngs::ThreadRng, seq::SliceRandom};
 
 pub fn _ai_random(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
     *list_all_moves(state).choose(rng).unwrap()

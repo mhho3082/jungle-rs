@@ -1,7 +1,4 @@
-use crate::ai::_ai_naive;
-use crate::ai::_ai_random;
-use crate::controller::*;
-use crate::model::*;
+use crate::{ai::*, controller::*, model::*};
 
 use colored::Colorize;
 use rand::thread_rng;
@@ -62,6 +59,8 @@ pub fn cli(
                 println!("{:?}", list_all_moves(model.curr()));
             }
 
+            // Using naive algorithm
+            // See `ai.rs` for all algorithms
             (piece, move_to) = _ai_naive(model.curr(), &mut rng);
 
             make_move(model, piece, move_to);

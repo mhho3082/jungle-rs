@@ -1,13 +1,3 @@
-// My thought is that these would mainly be
-// modifications on the model
-
-// Move: (index, moveTo)
-
-// TODO:
-// Time machine:
-// state_count
-// goto_state
-
 use crate::model::*;
 
 /// Gives possible move locations in [hjkl] (or <V^>)

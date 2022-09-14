@@ -3,9 +3,7 @@ mod controller;
 mod model;
 mod view;
 
-use crate::model::Model;
-use crate::view::cli;
-
+use crate::{model::Model, view::cli};
 use clap::Parser;
 
 #[derive(Parser, Debug)]
