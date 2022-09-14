@@ -67,16 +67,16 @@ pub fn cli(
             // See `ai.rs` for all algorithms
             (piece, move_to) = match ai {
                 AIType::Random | AIType::Null => {
-                    _ai_random(model.curr(), &mut rng)
+                    ai_random(model.curr(), &mut rng)
                 }
                 AIType::NaiveDefensive => {
-                    _ai_naive_defensive(model.curr(), &mut rng)
+                    ai_naive_defensive(model.curr(), &mut rng)
                 }
                 AIType::NaiveNeutral => {
-                    _ai_naive_neutral(model.curr(), &mut rng)
+                    ai_naive_neutral(model.curr(), &mut rng)
                 }
                 AIType::NaiveAggressive => {
-                    _ai_naive_aggressive(model.curr(), &mut rng)
+                    ai_naive_aggressive(model.curr(), &mut rng)
                 }
             };
 

@@ -17,13 +17,13 @@ pub enum AIType {
     NaiveAggressive,
 }
 
-pub fn _ai_random(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
+pub fn ai_random(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
     *list_all_moves(state).choose(rng).unwrap()
 }
 
 /// Randomly picks move if nothing to do
 /// This means that the AI doesn't really try to move towards enemy's den
-pub fn _ai_naive_defensive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
+pub fn ai_naive_defensive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
     let all_moves = list_all_moves(state);
 
     // Get in den already!
@@ -55,7 +55,7 @@ pub fn _ai_naive_defensive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
 }
 
 /// Always pick from the farthest moves if nothing to do
-pub fn _ai_naive_aggressive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
+pub fn ai_naive_aggressive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
     let all_moves = list_all_moves(state);
 
     // Get in den already!
@@ -112,7 +112,7 @@ pub fn _ai_naive_aggressive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
 }
 
 /// Picks move randomly (distributed with farness) when nothing to do
-pub fn _ai_naive_neutral(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
+pub fn ai_naive_neutral(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
     let all_moves = list_all_moves(state);
 
     // Get in den already!
