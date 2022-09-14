@@ -15,6 +15,10 @@ pub fn cli(
     debug: bool,
     no_clean: bool,
 ) {
+    let border = true;
+    let spaces = 1;
+    let indent = 0;
+
     let mut input = String::new();
 
     let mut piece: i32;
@@ -39,9 +43,9 @@ pub fn cli(
             print_board(
                 &model.curr().board,
                 model.current,
-                true,
-                1,
-                0,
+                border,
+                spaces,
+                indent,
                 Vec::new(),
             );
 
@@ -97,9 +101,9 @@ pub fn cli(
             print_board(
                 &model.curr().board,
                 model.current,
-                true,
-                1,
-                0,
+                border,
+                spaces,
+                indent,
                 Vec::new(),
             );
 
@@ -143,9 +147,9 @@ pub fn cli(
                 print_board(
                     &model.curr().board,
                     model.current,
-                    true,
-                    1,
-                    0,
+                    border,
+                    spaces,
+                    indent,
                     moves.iter().filter(|&&x| x < 63).collect(),
                 );
 
@@ -188,9 +192,9 @@ pub fn cli(
                 print_board(
                     &model.curr().board,
                     model.current,
-                    true,
-                    1,
-                    0,
+                    border,
+                    spaces,
+                    indent,
                     moves.iter().filter(|&&x| x < 63).collect(),
                 );
 
@@ -292,8 +296,9 @@ pub fn print_board(
     let mut was_river = false;
 
     println!(
-        "{}   Step {}",
-        " ".repeat((indent + space * 2) as usize),
+        "{}{}Step {}",
+        " ".repeat((indent + (space * 6 + 7) / 2 - 3) as usize),
+        if border { " " } else { "" },
         step + 1
     );
 
