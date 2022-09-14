@@ -92,3 +92,4 @@ pub static TRAPS_RED: [i32; 3] = [2, 4, 10];
 pub static DEN_BLUE: i32 = 59;
 pub static DEN_RED: i32 = 3;
 pub static COL_COUNT: i32 = 7;
+pub static ROW_COUNT: i32 = 9;

@@ -1,6 +1,6 @@
 use crate::{
     controller::{find_capture, list_all_moves},
-    model::{State, COL_COUNT, DEN_BLUE, DEN_RED},
+    model::{State, COL_COUNT, DEN_BLUE, DEN_RED, ROW_COUNT},
 };
 
 use rand::{
@@ -81,7 +81,7 @@ pub fn _ai_naive_aggressive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
             **attack_moves.choose(rng).unwrap()
         } else if state.cur_blue {
             // Find farthest move (blue)
-            let mut farthest: i32 = 10;
+            let mut farthest: i32 = ROW_COUNT;
             for (_, y) in &all_moves {
                 if (y / COL_COUNT) < farthest {
                     farthest = y / COL_COUNT;
@@ -140,7 +140,7 @@ pub fn _ai_naive_neutral(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
             // Generate distribution
             let dist_base = all_moves
                 .iter()
-                .map(|(_, y)| (10 - (y / COL_COUNT)))
+                .map(|(_, y)| (ROW_COUNT - (y / COL_COUNT)))
                 .collect::<Vec<i32>>();
             let dist = WeightedIndex::new(&dist_base).unwrap();
 
