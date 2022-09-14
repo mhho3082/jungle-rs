@@ -18,7 +18,7 @@ struct Args {
     #[clap(short, long, value_parser, default_value_t = false)]
     reverse: bool,
 
-    /// Whether player red is an AI
+    /// Use AI with the picked algorithm for red
     #[clap(short, long, value_enum, default_value_t = AIType::Null)]
     ai: AIType,
 
