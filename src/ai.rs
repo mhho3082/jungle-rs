@@ -29,7 +29,7 @@ pub fn _ai_naive_defensive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
         })
         .collect();
     if !win_moves.is_empty() {
-        return **win_moves.choose(rng).unwrap();
+        **win_moves.choose(rng).unwrap()
     } else {
         // Capture if possible
         let attack_moves: Vec<&(i32, i32)> = all_moves
@@ -37,10 +37,10 @@ pub fn _ai_naive_defensive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
             .filter(|(_, y)| find_capture(state, *y))
             .collect();
         if !attack_moves.is_empty() {
-            return **attack_moves.choose(rng).unwrap();
+            **attack_moves.choose(rng).unwrap()
         } else {
             // Just randomly pick one
-            return *all_moves.choose(rng).unwrap();
+            *all_moves.choose(rng).unwrap()
         }
     }
 }
@@ -61,7 +61,7 @@ pub fn _ai_naive_aggressive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
         })
         .collect();
     if !win_moves.is_empty() {
-        return **win_moves.choose(rng).unwrap();
+        **win_moves.choose(rng).unwrap()
     } else {
         // Capture if possible
         let attack_moves: Vec<&(i32, i32)> = all_moves
@@ -69,7 +69,7 @@ pub fn _ai_naive_aggressive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
             .filter(|(_, y)| find_capture(state, *y))
             .collect();
         if !attack_moves.is_empty() {
-            return **attack_moves.choose(rng).unwrap();
+            **attack_moves.choose(rng).unwrap()
         } else if state.cur_blue {
             // Find farthest move (blue)
             let mut farthest: i32 = 10;
@@ -78,12 +78,12 @@ pub fn _ai_naive_aggressive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
                     farthest = y / 7;
                 }
             }
-            return **all_moves
+            **all_moves
                 .iter()
                 .filter(|(_, y)| (y / 7) == farthest)
                 .collect::<Vec<&(i32, i32)>>()
                 .choose(rng)
-                .unwrap();
+                .unwrap()
         } else {
             // Find farthest move (red)
             let mut farthest: i32 = 0;
@@ -92,12 +92,12 @@ pub fn _ai_naive_aggressive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
                     farthest = y / 7;
                 }
             }
-            return **all_moves
+            **all_moves
                 .iter()
                 .filter(|(_, y)| (y / 7) == farthest)
                 .collect::<Vec<&(i32, i32)>>()
                 .choose(rng)
-                .unwrap();
+                .unwrap()
         }
     }
 }
@@ -118,7 +118,7 @@ pub fn _ai_naive_neutral(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
         })
         .collect();
     if !win_moves.is_empty() {
-        return **win_moves.choose(rng).unwrap();
+        **win_moves.choose(rng).unwrap()
     } else {
         // Capture if possible
         let attack_moves: Vec<&(i32, i32)> = all_moves
@@ -126,7 +126,7 @@ pub fn _ai_naive_neutral(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
             .filter(|(_, y)| find_capture(state, *y))
             .collect();
         if !attack_moves.is_empty() {
-            return **attack_moves.choose(rng).unwrap();
+            **attack_moves.choose(rng).unwrap()
         } else if state.cur_blue {
             // Generate distribution
             let dist_base = all_moves
