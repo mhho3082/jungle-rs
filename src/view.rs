@@ -292,7 +292,7 @@ pub fn print_board(
     let mut was_river = false;
 
     println!(
-        "{}    Step {}",
+        "{}   Step {}",
         " ".repeat((indent + space * 2) as usize),
         step + 1
     );
