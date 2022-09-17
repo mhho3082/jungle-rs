@@ -14,6 +14,7 @@ pub fn cli(
     reverse: bool,
     debug: bool,
     no_clean: bool,
+    time_machine: bool,
 ) {
     // The UI variables
     let border = true;
@@ -113,14 +114,19 @@ pub fn cli(
             );
 
             // Get which piece to move
-            println!(
-                "It's {}'s turn! Please enter the piece short name, or 'n'/'p' for time travel (next/prev).",
+            print!(
+                "It's {}'s turn! Please enter the piece name",
                 if model.curr().cur_blue {
                     "blue".blue()
                 } else {
                     "red".red()
                 }
             );
+            if time_machine {
+                println!(", or 'n'/'p' for time travel (next/prev).");
+            } else {
+                println!(".");
+            }
 
             // Debug: print all moves possible
             if debug {
@@ -137,21 +143,28 @@ pub fn cli(
                 if let Some(index) = accept_piece(&input) {
                     // Check if using time machine
                     if [8, 9].contains(&index) {
-                        if index == 8 {
-                            if model.current + 1 < model.history.len() {
-                                model.current +=
+                        if time_machine {
+                            if index == 8 {
+                                if model.current + 1 < model.history.len() {
+                                    model.current +=
+                                        if ai != AIType::Null { 2 } else { 1 };
+                                    continue 'main;
+                                } else {
+                                    println!("Already at end of history! Please try again.");
+                                    continue 'input;
+                                }
+                            } else if model.current > 0 {
+                                model.current -=
                                     if ai != AIType::Null { 2 } else { 1 };
                                 continue 'main;
                             } else {
-                                println!("Already at end of history! Please try again.");
+                                println!("Already at beginning of history! Please try again.");
                                 continue 'input;
                             }
-                        } else if model.current > 0 {
-                            model.current -=
-                                if ai != AIType::Null { 2 } else { 1 };
-                            continue 'main;
                         } else {
-                            println!("Already at beginning of history! Please try again.");
+                            println!(
+                                "Time machine not enabled! Please try again."
+                            );
                             continue 'input;
                         }
                     }

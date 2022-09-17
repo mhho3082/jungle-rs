@@ -31,6 +31,10 @@ struct Args {
     /// (always off in debug mode)
     #[clap(short, long, value_parser, default_value_t = false)]
     no_clean: bool,
+
+    /// Whether to use time machine
+    #[clap(short, long, value_parser, default_value_t = false)]
+    time_machine: bool,
 }
 
 // The best explanation of the game:
@@ -43,5 +47,5 @@ fn main() {
 
     // Launch the user loop
     let mut model = Model::new();
-    cli(&mut model, args.ai, args.reverse, args.debug, args.no_clean);
+    cli(&mut model, args.ai, args.reverse, args.debug, args.no_clean, args.time_machine);
 }
