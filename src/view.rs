@@ -114,7 +114,7 @@ pub fn cli(
 
             // Get which piece to move
             println!(
-                "It's {}'s turn! Please enter the piece name.",
+                "It's {}'s turn! Please enter the piece short name, or 'n'/'p' for time travel (next/prev).",
                 if model.curr().cur_blue {
                     "blue".blue()
                 } else {
@@ -135,6 +135,27 @@ pub fn cli(
 
                 // Check if the piece input is correct
                 if let Some(index) = accept_piece(&input) {
+                    // Check if using time machine
+                    if [8, 9].contains(&index) {
+                        if index == 8 {
+                            if model.current + 1 < model.history.len() {
+                                model.current +=
+                                    if ai != AIType::Null { 2 } else { 1 };
+                                continue 'main;
+                            } else {
+                                println!("Already at end of history! Please try again.");
+                                continue 'input;
+                            }
+                        } else if model.current > 0 {
+                            model.current -=
+                                if ai != AIType::Null { 2 } else { 1 };
+                            continue 'main;
+                        } else {
+                            println!("Already at beginning of history! Please try again.");
+                            continue 'input;
+                        }
+                    }
+
                     piece = index;
 
                     // Check if there are any moves for this piece
@@ -240,29 +261,40 @@ pub fn cli(
 }
 
 /// Accepts piece inputs insensitively
+/// 1-7: piece, 8: next, 9: prev
 fn accept_piece(input: &str) -> Option<i32> {
-    if !["r", "c", "d", "w", "o", "t", "l", "e"]
-        .contains(&input.to_lowercase().as_str())
+    let inp = input.to_ascii_lowercase();
+
+    if !["r", "c", "d", "w", "o", "t", "l", "e", "n", "p"]
+        .contains(&inp.as_str())
         && ![
-            "rat", "cat", "dog", "wolf", "leopard", "tiger", "lion", "elephant",
+            "rat", "cat", "dog", "wolf", "leopard", "tiger", "lion",
+            "elephant", "next", "prev",
         ]
-        .contains(&input.to_lowercase().as_str())
+        .contains(&inp.as_str())
     {
         return None;
     }
 
     if let Some(index) = ["r", "c", "d", "w", "o", "t", "l", "e"]
         .iter()
-        .position(|&x| x == input.to_lowercase().as_str())
+        .position(|&x| x == inp)
     {
         Some(index as i32)
+    } else if let Some(index) = [
+        "rat", "cat", "dog", "wolf", "leopard", "tiger", "lion", "elephant",
+    ]
+    .iter()
+    .position(|&x| x == inp)
+    {
+        Some(index as i32)
+    } else if let Some(index) = ["n", "p"].iter().position(|&x| x == inp) {
+        Some((index + 8) as i32)
     } else {
-        [
-            "rat", "cat", "dog", "wolf", "leopard", "tiger", "lion", "elephant",
-        ]
-        .iter()
-        .position(|&x| x == input.to_lowercase().as_str())
-        .map(|x| x as i32)
+        ["next", "prev"]
+            .iter()
+            .position(|&x| x == inp)
+            .map(|x| x as i32)
     }
 }
 

@@ -227,6 +227,11 @@ pub fn make_move(model: &mut Model, piece: i32, move_to: i32) {
     state.cur_blue = !state.cur_blue;
     state.won = check_win(&state);
 
+    // Pop all states after current state
+    while model.history.len() > model.current + 1 {
+        model.history.pop();
+    }
+
     model.history.push(state);
     model.current += 1;
 }
