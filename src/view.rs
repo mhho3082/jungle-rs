@@ -123,10 +123,9 @@ pub fn cli(
                 }
             );
             if time_machine {
-                println!(", or 'n'/'p' for time travel (next/prev).");
-            } else {
-                println!(".");
+                print!(", or 'n'/'p' for time travel (next/prev)");
             }
+            println!(", or 'q' for quit.");
 
             // Debug: print all moves possible
             if debug {
@@ -141,6 +140,11 @@ pub fn cli(
 
                 // Check if the piece input is correct
                 if let Some(index) = accept_piece(&input) {
+                    // Check if quitting
+                    if index == -1 {
+                        println!("Goodbye!");
+                        break 'main;
+                    }
                     // Check if using time machine
                     if [8, 9].contains(&index) {
                         if time_machine {
@@ -274,15 +278,15 @@ pub fn cli(
 }
 
 /// Accepts piece inputs insensitively
-/// 1-7: piece, 8: next, 9: prev
+/// 1-7: piece, 8: next, 9: prev, -1: quit
 fn accept_piece(input: &str) -> Option<i32> {
     let inp = input.to_ascii_lowercase();
 
-    if !["r", "c", "d", "w", "o", "t", "l", "e", "n", "p"]
+    if !["r", "c", "d", "w", "o", "t", "l", "e", "n", "p", "q"]
         .contains(&inp.as_str())
         && ![
             "rat", "cat", "dog", "wolf", "leopard", "tiger", "lion",
-            "elephant", "next", "prev",
+            "elephant", "next", "prev", "quit",
         ]
         .contains(&inp.as_str())
     {
@@ -303,11 +307,11 @@ fn accept_piece(input: &str) -> Option<i32> {
         Some(index as i32)
     } else if let Some(index) = ["n", "p"].iter().position(|&x| x == inp) {
         Some((index + 8) as i32)
+    } else if let Some(index) = ["next", "prev"].iter().position(|&x| x == inp)
+    {
+        Some((index + 8) as i32)
     } else {
-        ["next", "prev"]
-            .iter()
-            .position(|&x| x == inp)
-            .map(|x| x as i32)
+        Some(-1)
     }
 }
 
