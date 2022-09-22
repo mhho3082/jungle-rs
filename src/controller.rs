@@ -25,7 +25,7 @@ pub fn list_piece_moves(state: &State, piece: i32) -> [i32; 4] {
     // Find river moves
     if [5, 6].contains(&piece) {
         for (i, e) in [-1, 7, -7, 1].iter().enumerate() {
-            if RIVERS.contains(&(original + e)) {
+            if out[i] > 62 && RIVERS.contains(&(original + e)) {
                 for x in RIVER_MOVES {
                     if x.contains(&original) {
                         let temp = x.iter().filter(|y| y != &&original).sum();
