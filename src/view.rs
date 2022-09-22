@@ -188,20 +188,22 @@ pub fn cli(
                 }
             }
 
+            // Clean the screen
+            if !no_clean && !debug {
+                print!("\x1B[2J\x1B[1;1H");
+            }
+
+            print_board(
+                &model.curr().board,
+                model.current,
+                border,
+                spaces,
+                indent,
+                moves.iter().filter(|&&x| x < 63).collect(),
+            );
+
+            // List the moves
             if debug {
-                // Manual input of square index
-
-                // Print the board
-                print_board(
-                    &model.curr().board,
-                    model.current,
-                    border,
-                    spaces,
-                    indent,
-                    moves.iter().filter(|&&x| x < 63).collect(),
-                );
-
-                // List the moves
                 print!("Moves: ");
                 for x in moves {
                     if x < 63 {
@@ -209,68 +211,49 @@ pub fn cli(
                     }
                 }
                 println!();
+            }
 
-                // Get where to move to
-                println!("Please enter move index.");
-                loop {
-                    input.clear();
-                    io::stdin().read_line(&mut input).unwrap();
-                    input = input.trim().to_string();
-                    if let Ok(ok) = input.parse::<i32>() {
-                        move_to = ok;
+            // Get where to move to
+            println!("Please enter move direction ([wasd] or [hjkl], or 'c'/'n' for cancel).");
+            if debug {
+                println!("You can also enter the move index.");
+            }
 
-                        if check_move(model.curr(), piece, move_to) {
-                            make_move(model, piece, move_to);
-                            println!("Move successful!");
-                            continue 'main;
-                        } else {
-                            println!("Move illegal! Please try again.");
-                        }
-                    } else {
-                        println!("Wrong input! Please try again.");
+            'input_2: loop {
+                input.clear();
+                io::stdin().read_line(&mut input).unwrap();
+                input = input.trim().to_string();
+                if let Ok(ok) = input.parse::<i32>() {
+                    if !debug {
+                        println!("Debug mode not enabled! Please try again.");
+                        continue 'input_2;
                     }
-                }
-            } else {
-                // Automatic arrow-key indexing
+                    move_to = ok;
 
-                // Clean the screen
-                if !no_clean {
-                    print!("\x1B[2J\x1B[1;1H");
-                }
-
-                print_board(
-                    &model.curr().board,
-                    model.current,
-                    border,
-                    spaces,
-                    indent,
-                    moves.iter().filter(|&&x| x < 63).collect(),
-                );
-
-                // Get where to move to
-                println!("Please enter move direction ([wasd] or [hjkl], or [cn] cancel).");
-                loop {
-                    input.clear();
-                    io::stdin().read_line(&mut input).unwrap();
-                    input = input.trim().to_string();
-                    if let Some(dir) = accept_arrow(&input) {
-                        // Cancel
-                        if dir == 4 {
-                            break;
-                        }
-
-                        move_to = moves[dir];
-
-                        if check_move(model.curr(), piece, move_to) {
-                            make_move(model, piece, move_to);
-                            println!("Move successful!");
-                            continue 'main;
-                        } else {
-                            println!("Move illegal! Please try again.");
-                        }
+                    if check_move(model.curr(), piece, move_to) {
+                        make_move(model, piece, move_to);
+                        println!("Move successful!");
+                        continue 'main;
                     } else {
-                        println!("Wrong input! Please try again.");
+                        println!("Move illegal! Please try again.");
                     }
+                } else if let Some(dir) = accept_arrow(&input) {
+                    // Cancel
+                    if dir == 4 {
+                        break 'input_2;
+                    }
+
+                    move_to = moves[dir];
+
+                    if check_move(model.curr(), piece, move_to) {
+                        make_move(model, piece, move_to);
+                        println!("Move successful!");
+                        continue 'main;
+                    } else {
+                        println!("Move illegal! Please try again.");
+                    }
+                } else {
+                    println!("Wrong input! Please try again.");
                 }
             }
         }
