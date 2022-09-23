@@ -209,16 +209,14 @@ pub fn make_move(model: &mut Model, piece: i32, move_to: i32) {
     // Move piece and make capture if needed
     if state.cur_blue {
         state.board.blue[piece as usize] = move_to;
-        if state.board.red.contains(&move_to) {
-            let enemy =
-                state.board.red.iter().position(|&x| x == move_to).unwrap();
+        if let Some(enemy) = state.board.red.iter().position(|&x| x == move_to)
+        {
             state.board.red[enemy] = 63;
         }
     } else {
         state.board.red[piece as usize] = move_to;
-        if state.board.blue.contains(&move_to) {
-            let enemy =
-                state.board.blue.iter().position(|&x| x == move_to).unwrap();
+        if let Some(enemy) = state.board.blue.iter().position(|&x| x == move_to)
+        {
             state.board.blue[enemy] = 63;
         }
     }

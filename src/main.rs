@@ -9,6 +9,9 @@ mod view;
 use crate::{ai::AIType, model::Model, view::cli};
 use clap::Parser;
 
+// Explanation of the game:
+// https://en.wikipedia.org/wiki/Jungle_(board_game)
+
 // Just a simple list of arguments for the `clap` library
 // `derive` and the `#[...]` are just macros
 #[derive(Parser, Debug)]
@@ -35,9 +38,6 @@ pub struct Args {
     #[clap(short, long, value_parser, default_value_t = false)]
     time_machine: bool,
 }
-
-// The best explanation of the game:
-// https://en.wikipedia.org/wiki/Jungle_(board_game)
 
 // The entry point
 fn main() {
