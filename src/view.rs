@@ -262,17 +262,6 @@ pub fn cli(model: &mut Model, args: Args) {
 fn accept_piece(input: &str) -> Option<i32> {
     let inp = input.to_ascii_lowercase();
 
-    if !["r", "c", "d", "w", "o", "t", "l", "e", "n", "p", "q"]
-        .contains(&inp.as_str())
-        && ![
-            "rat", "cat", "dog", "wolf", "leopard", "tiger", "lion",
-            "elephant", "next", "prev", "quit",
-        ]
-        .contains(&inp.as_str())
-    {
-        return None;
-    }
-
     if let Some(index) = ["r", "c", "d", "w", "o", "t", "l", "e"]
         .iter()
         .position(|&x| x == inp)
@@ -290,31 +279,25 @@ fn accept_piece(input: &str) -> Option<i32> {
     } else if let Some(index) = ["next", "prev"].iter().position(|&x| x == inp)
     {
         Some((index + 8) as i32)
-    } else {
+    } else if ["q", "quit"].contains(&inp.as_str()) {
         Some(-1)
+    } else {
+        None
     }
 }
 
 /// Accepts direction inputs case-insensitively
 /// Accepts `c` and `n` as cancel
 fn accept_arrow(input: &str) -> Option<usize> {
-    if !["w", "a", "s", "d", "h", "j", "k", "l", "c", "n"]
-        .contains(&input.to_lowercase().as_str())
-    {
-        return None;
-    }
-
-    if let Some(dir) = ["h", "j", "k", "l"]
-        .iter()
-        .position(|&x| x == input.to_lowercase().as_str())
-    {
+    let inp = input.to_ascii_lowercase();
+    if let Some(dir) = ["h", "j", "k", "l"].iter().position(|&x| x == inp) {
         Some(dir)
     } else if let Some(dir) = ["a", "s", "w", "d"]
         .iter()
         .position(|&x| x == input.to_lowercase().as_str())
     {
         Some(dir)
-    } else if ["c", "n"].contains(&input.to_lowercase().as_str()) {
+    } else if ["c", "n", "cancel"].contains(&inp.as_str()) {
         Some(4)
     } else {
         None
