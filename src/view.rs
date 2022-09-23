@@ -1,4 +1,4 @@
-use crate::{ai::*, controller::*, model::*};
+use crate::{ai::*, controller::*, model::*, Args};
 
 use colored::Colorize;
 use rand::thread_rng;
@@ -8,14 +8,7 @@ use std::io;
 // https://stackoverflow.com/questions/34837011/how-to-clear-the-terminal-screen-in-rust-after-a-new-line-is-printed
 
 /// The CLI-based user loop
-pub fn cli(
-    model: &mut Model,
-    ai: AIType,
-    reverse: bool,
-    debug: bool,
-    no_clean: bool,
-    time_machine: bool,
-) {
+pub fn cli(model: &mut Model, args: Args) {
     // The UI variables
     let border = true;
     let spaces = 1;
@@ -30,7 +23,7 @@ pub fn cli(
     let mut moves: [i32; 4];
 
     // Reverse the order
-    if reverse {
+    if args.reverse {
         model.history[0].cur_blue = false;
     }
 
@@ -40,7 +33,7 @@ pub fn cli(
     'main: loop {
         if model.curr().won {
             // Clean the screen
-            if !no_clean && !debug {
+            if !args.no_clean && !args.debug {
                 print!("\x1B[2J\x1B[1;1H");
             }
 
@@ -64,16 +57,16 @@ pub fn cli(
                 }
             );
             break 'main;
-        } else if ai != AIType::Null && !model.curr().cur_blue {
+        } else if args.ai != AIType::Null && !model.curr().cur_blue {
             // AI move
 
             // Debug: print all moves possible
-            if debug {
+            if args.debug {
                 println!("{:?}", list_all_moves(model.curr()));
             }
 
             // Pick algorithm
-            (piece, move_to) = match ai {
+            (piece, move_to) = match args.ai {
                 AIType::Random | AIType::Null => {
                     ai_random(model.curr(), &mut rng)
                 }
@@ -92,14 +85,14 @@ pub fn cli(
             make_move(model, piece, move_to);
 
             // Debug: print move made
-            if debug {
+            if args.debug {
                 println!("AI move: {:?}", (piece, move_to));
             }
         } else {
             // Human move
 
             // Clean the screen
-            if !no_clean && !debug {
+            if !args.no_clean && !args.debug {
                 print!("\x1B[2J\x1B[1;1H");
             }
 
@@ -122,13 +115,13 @@ pub fn cli(
                     "red".red()
                 }
             );
-            if time_machine {
+            if args.time_machine {
                 print!(", or 'n'/'p' for time travel (next/prev)");
             }
             println!(", or 'q' for quit.");
 
             // Debug: print all moves possible
-            if debug {
+            if args.debug {
                 println!("{:?}", list_all_moves(model.curr()));
             }
 
@@ -147,11 +140,15 @@ pub fn cli(
                     }
                     // Check if using time machine
                     if [8, 9].contains(&index) {
-                        if time_machine {
+                        if args.time_machine {
                             if index == 8 {
                                 if model.current + 1 < model.history.len() {
-                                    model.current +=
-                                        if ai != AIType::Null { 2 } else { 1 };
+                                    model.current += if args.ai != AIType::Null
+                                    {
+                                        2
+                                    } else {
+                                        1
+                                    };
                                     continue 'main;
                                 } else {
                                     println!("Already at end of history! Please try again.");
@@ -159,7 +156,7 @@ pub fn cli(
                                 }
                             } else if model.current > 0 {
                                 model.current -=
-                                    if ai != AIType::Null { 2 } else { 1 };
+                                    if args.ai != AIType::Null { 2 } else { 1 };
                                 continue 'main;
                             } else {
                                 println!("Already at beginning of history! Please try again.");
@@ -189,7 +186,7 @@ pub fn cli(
             }
 
             // Clean the screen
-            if !no_clean && !debug {
+            if !args.no_clean && !args.debug {
                 print!("\x1B[2J\x1B[1;1H");
             }
 
@@ -203,7 +200,7 @@ pub fn cli(
             );
 
             // List the moves
-            if debug {
+            if args.debug {
                 print!("Moves: ");
                 for x in moves {
                     if x < 63 {
@@ -215,7 +212,7 @@ pub fn cli(
 
             // Get where to move to
             println!("Please enter move direction ([wasd] or [hjkl], or 'c'/'n' for cancel).");
-            if debug {
+            if args.debug {
                 println!("You can also enter the move index.");
             }
 
@@ -224,7 +221,7 @@ pub fn cli(
                 io::stdin().read_line(&mut input).unwrap();
                 input = input.trim().to_string();
                 if let Ok(ok) = input.parse::<i32>() {
-                    if !debug {
+                    if !args.debug {
                         println!("Debug mode not enabled! Please try again.");
                         continue 'input_2;
                     }

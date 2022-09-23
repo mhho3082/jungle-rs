@@ -14,7 +14,7 @@ use clap::Parser;
 // `derive` and the `#[...]` are just macros
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
-struct Args {
+pub struct Args {
     /// Whether to run in debug mode
     #[clap(short, long, value_parser, default_value_t = false)]
     debug: bool,
@@ -47,5 +47,5 @@ fn main() {
 
     // Launch the user loop
     let mut model = Model::new();
-    cli(&mut model, args.ai, args.reverse, args.debug, args.no_clean, args.time_machine);
+    cli(&mut model, args);
 }
