@@ -290,11 +290,11 @@ fn accept_piece(input: &str) -> Option<i32> {
 /// Accepts `c` and `n` as cancel
 fn accept_arrow(input: &str) -> Option<usize> {
     let inp = input.to_ascii_lowercase();
+
     if let Some(dir) = ["h", "j", "k", "l"].iter().position(|&x| x == inp) {
         Some(dir)
-    } else if let Some(dir) = ["a", "s", "w", "d"]
-        .iter()
-        .position(|&x| x == input.to_lowercase().as_str())
+    } else if let Some(dir) =
+        ["a", "s", "w", "d"].iter().position(|&x| x == inp)
     {
         Some(dir)
     } else if ["c", "n", "cancel"].contains(&inp.as_str()) {

@@ -6,8 +6,7 @@ mod view;
 
 // Imports (or includes)
 // `crate` refers to the whole application
-use crate::{model::Model, view::cli};
-use ai::AIType;
+use crate::{ai::AIType, model::Model, view::cli};
 use clap::Parser;
 
 // Just a simple list of arguments for the `clap` library
