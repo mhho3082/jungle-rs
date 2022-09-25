@@ -237,7 +237,7 @@ pub fn cli(model: &mut Model, args: Args) {
                 } else if let Some(dir) = accept_arrow(&input) {
                     // Cancel
                     if dir == 4 {
-                        break 'input;
+                        continue 'main;
                     }
 
                     move_to = moves[dir];
