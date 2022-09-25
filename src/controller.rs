@@ -242,6 +242,17 @@ pub fn check_win(state: &State) -> bool {
         || state.board.red.iter().all(|x| x > &62)
 }
 
+/// Makes a time travel move
+pub fn make_travel(model: &mut Model, jump: i32) -> Result<(), ()> {
+    let temp = model.current as i32 + jump;
+    if temp < 0 || temp >= model.history.len() as i32 {
+        Err(())
+    } else {
+        model.current = temp as usize;
+        Ok(())
+    }
+}
+
 // Arrays of arrays are used,
 // since, they are static anyways
 static RIVER_MOVES: [[i32; 2]; 10] = [

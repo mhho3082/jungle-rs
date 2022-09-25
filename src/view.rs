@@ -141,26 +141,22 @@ pub fn cli(model: &mut Model, args: Args) {
                     // Check if using time machine
                     if [8, 9].contains(&index) {
                         if args.time_machine {
+                            let mut temp = 0;
                             if index == 8 {
-                                if model.current + 1 < model.history.len() {
-                                    model.current += if args.ai != AIType::Null
-                                    {
-                                        2
-                                    } else {
-                                        1
-                                    };
+                                temp +=
+                                    if args.ai != AIType::Null { 2 } else { 1 };
+                            } else {
+                                temp -=
+                                    if args.ai != AIType::Null { 2 } else { 1 };
+                            }
+                            match make_travel(model, temp) {
+                                Ok(_) => {
                                     continue 'main;
-                                } else {
-                                    println!("Already at end of history! Please try again.");
+                                }
+                                Err(_) => {
+                                    println!("Already at {} of history! Please try again.", if index == 8 { "end" } else {"beginning"});
                                     continue 'input;
                                 }
-                            } else if model.current > 0 {
-                                model.current -=
-                                    if args.ai != AIType::Null { 2 } else { 1 };
-                                continue 'main;
-                            } else {
-                                println!("Already at beginning of history! Please try again.");
-                                continue 'input;
                             }
                         } else {
                             println!(
