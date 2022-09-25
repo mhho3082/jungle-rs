@@ -10,11 +10,11 @@ use rand::{
 
 #[derive(clap::ValueEnum, Clone, Debug, PartialEq, Eq)]
 pub enum AIType {
-    Null,
     Random,
     NaiveDefensive,
     NaiveNeutral,
     NaiveAggressive,
+    None,
 }
 
 /// Randomly pick a move

@@ -57,7 +57,7 @@ pub fn cli(model: &mut Model, args: Args) {
                 }
             );
             break 'main;
-        } else if args.ai != AIType::Null && !model.curr().cur_blue {
+        } else if args.ai != AIType::None && !model.curr().cur_blue {
             // AI move
 
             // Debug: print all moves possible
@@ -67,7 +67,7 @@ pub fn cli(model: &mut Model, args: Args) {
 
             // Pick algorithm
             (piece, move_to) = match args.ai {
-                AIType::Random | AIType::Null => {
+                AIType::Random | AIType::None => {
                     ai_random(model.curr(), &mut rng)
                 }
                 AIType::NaiveDefensive => {
@@ -144,7 +144,7 @@ pub fn cli(model: &mut Model, args: Args) {
                     if [8, 9].contains(&index) {
                         if args.time_machine {
                             let mut temp =
-                                if args.ai != AIType::Null { 2 } else { 1 };
+                                if args.ai != AIType::None { 2 } else { 1 };
                             temp *= if index == 8 { 1 } else { -1 };
                             match make_travel(model, temp) {
                                 Ok(_) => {

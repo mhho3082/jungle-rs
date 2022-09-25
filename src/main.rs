@@ -26,7 +26,7 @@ pub struct Args {
     reverse: bool,
 
     /// Use AI with the picked algorithm for red
-    #[clap(short, long, value_enum, default_value_t = AIType::Null)]
+    #[clap(short, long, value_enum, default_value_t = AIType::None)]
     ai: AIType,
 
     /// Whether not to clean the screen after each input
