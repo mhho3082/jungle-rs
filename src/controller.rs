@@ -202,9 +202,16 @@ pub fn find_capture(state: &State, move_to: i32) -> bool {
 }
 
 /// Makes a given move
-/// assumes that the move is legal already
-pub fn make_move(model: &mut Model, piece: i32, move_to: i32) {
+pub fn make_move(
+    model: &mut Model,
+    piece: i32,
+    move_to: i32,
+) -> Result<(), ()> {
     let mut state = *model.curr();
+
+    if !check_move(&state, piece, move_to) {
+        return Err(());
+    }
 
     // Move piece and make capture if needed
     if state.cur_blue {
@@ -232,6 +239,8 @@ pub fn make_move(model: &mut Model, piece: i32, move_to: i32) {
 
     model.history.push(state);
     model.current += 1;
+
+    Ok(())
 }
 
 /// Checks if a winning condition is reached in a state

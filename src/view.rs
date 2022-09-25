@@ -82,7 +82,9 @@ pub fn cli(model: &mut Model, args: Args) {
             };
 
             // Make the move
-            make_move(model, piece, move_to);
+            if make_move(model, piece, move_to).is_err() {
+                println!("An error occured with AI move");
+            }
 
             // Debug: print move made
             if args.debug {
@@ -223,12 +225,15 @@ pub fn cli(model: &mut Model, args: Args) {
                     }
                     move_to = ok;
 
-                    if check_move(model.curr(), piece, move_to) {
-                        make_move(model, piece, move_to);
-                        println!("Move successful!");
-                        continue 'main;
-                    } else {
-                        println!("Move illegal! Please try again.");
+                    match make_move(model, piece, move_to) {
+                        Ok(_) => {
+                            println!("Move successful!");
+                            continue 'main;
+                        }
+                        Err(_) => {
+                            println!("Move illegal! Please try again.");
+                            continue 'input;
+                        }
                     }
                 } else if let Some(dir) = accept_arrow(&input) {
                     // Cancel
@@ -238,15 +243,19 @@ pub fn cli(model: &mut Model, args: Args) {
 
                     move_to = moves[dir];
 
-                    if check_move(model.curr(), piece, move_to) {
-                        make_move(model, piece, move_to);
-                        println!("Move successful!");
-                        continue 'main;
-                    } else {
-                        println!("Move illegal! Please try again.");
+                    match make_move(model, piece, move_to) {
+                        Ok(_) => {
+                            println!("Move successful!");
+                            continue 'main;
+                        }
+                        Err(_) => {
+                            println!("Move illegal! Please try again.");
+                            continue 'input;
+                        }
                     }
                 } else {
                     println!("Wrong input! Please try again.");
+                    continue 'input;
                 }
             }
         }
@@ -283,7 +292,7 @@ fn accept_piece(input: &str) -> Option<i32> {
 }
 
 /// Accepts direction inputs case-insensitively
-/// Accepts `c` and `n` as cancel
+/// Accepts `c` and `n` as cancel (return 4)
 fn accept_arrow(input: &str) -> Option<usize> {
     let inp = input.to_ascii_lowercase();
 
