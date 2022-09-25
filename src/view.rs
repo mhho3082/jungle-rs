@@ -216,14 +216,14 @@ pub fn cli(model: &mut Model, args: Args) {
                 println!("You can also enter the move index.");
             }
 
-            'input_2: loop {
+            'input: loop {
                 input.clear();
                 io::stdin().read_line(&mut input).unwrap();
                 input = input.trim().to_string();
                 if let Ok(ok) = input.parse::<i32>() {
                     if !args.debug {
                         println!("Debug mode not enabled! Please try again.");
-                        continue 'input_2;
+                        continue 'input;
                     }
                     move_to = ok;
 
@@ -237,7 +237,7 @@ pub fn cli(model: &mut Model, args: Args) {
                 } else if let Some(dir) = accept_arrow(&input) {
                     // Cancel
                     if dir == 4 {
-                        break 'input_2;
+                        break 'input;
                     }
 
                     move_to = moves[dir];
