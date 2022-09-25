@@ -48,14 +48,20 @@ pub fn cli(model: &mut Model, args: Args) {
             );
 
             // Congratulate win and stop the loop
-            println!(
-                "{} won! Congratulations!",
-                if model.curr().cur_blue {
-                    "Red".red()
-                } else {
-                    "Blue".blue()
-                }
-            );
+            if args.ai == AIType::None {
+                println!(
+                    "{} won! Congratulations!",
+                    if model.curr().cur_blue {
+                        "Red".red()
+                    } else {
+                        "Blue".blue()
+                    }
+                );
+            } else if model.curr().cur_blue {
+                println!("The AI won! Try harder next time...");
+            } else {
+                println!("You won! Congratulations!");
+            }
             break 'main;
         } else if args.ai != AIType::None && !model.curr().cur_blue {
             // AI move
@@ -110,11 +116,13 @@ pub fn cli(model: &mut Model, args: Args) {
 
             // Get which piece to move
             print!(
-                "It's {}'s turn! Please enter the piece name",
-                if model.curr().cur_blue {
-                    "blue".blue()
+                "It's {} turn! Please enter the piece name",
+                if args.ai != AIType::None {
+                    "your".normal()
+                } else if model.curr().cur_blue {
+                    "blue's".blue()
                 } else {
-                    "red".red()
+                    "red's".red()
                 }
             );
             if args.time_machine {
