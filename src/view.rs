@@ -143,14 +143,9 @@ pub fn cli(model: &mut Model, args: Args) {
                     // Check if using time machine
                     if [8, 9].contains(&index) {
                         if args.time_machine {
-                            let mut temp = 0;
-                            if index == 8 {
-                                temp +=
-                                    if args.ai != AIType::Null { 2 } else { 1 };
-                            } else {
-                                temp -=
-                                    if args.ai != AIType::Null { 2 } else { 1 };
-                            }
+                            let mut temp =
+                                if args.ai != AIType::Null { 2 } else { 1 };
+                            temp *= if index == 8 { 1 } else { -1 };
                             match make_travel(model, temp) {
                                 Ok(_) => {
                                     continue 'main;
