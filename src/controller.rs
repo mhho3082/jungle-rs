@@ -66,7 +66,7 @@ pub fn check_move(state: &State, piece: i32, move_to: i32) -> bool {
 
 /// Checks if the movement is legal
 /// Ignores captures (or blockages)
-pub fn check_walk(state: &State, piece: i32, move_to: i32) -> bool {
+fn check_walk(state: &State, piece: i32, move_to: i32) -> bool {
     let original = if state.cur_blue {
         state.board.blue[piece as usize]
     } else {
@@ -145,7 +145,7 @@ pub fn check_walk(state: &State, piece: i32, move_to: i32) -> bool {
 }
 
 /// Checks if capture, if any, is legal (or crash into ally)
-pub fn check_capture(state: &State, piece: i32, move_to: i32) -> bool {
+fn check_capture(state: &State, piece: i32, move_to: i32) -> bool {
     // Check if there is anything to capture
     // or crash into ally
     if state.cur_blue {
