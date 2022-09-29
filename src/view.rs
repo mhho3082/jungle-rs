@@ -71,23 +71,8 @@ pub fn cli(model: &mut Model, args: Args) {
                 println!("{:?}", list_all_moves(model.curr()));
             }
 
-            // Pick algorithm
-            (piece, move_to) = match args.ai {
-                AIType::Random | AIType::None => {
-                    ai_random(model.curr(), &mut rng)
-                }
-                AIType::NaiveDefensive => {
-                    ai_naive_defensive(model.curr(), &mut rng)
-                }
-                AIType::NaiveNeutral => {
-                    ai_naive_neutral(model.curr(), &mut rng)
-                }
-                AIType::NaiveAggressive => {
-                    ai_naive_aggressive(model.curr(), &mut rng)
-                }
-            };
-
-            // Make the move
+            // Decide and make the move
+            (piece, move_to) = args.ai.decide_move(model.curr(), &mut rng);
             if make_move(model, piece, move_to).is_err() {
                 println!("An error occured with AI move");
             }

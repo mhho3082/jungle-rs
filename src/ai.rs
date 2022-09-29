@@ -17,6 +17,18 @@ pub enum AIType {
     None,
 }
 
+impl AIType {
+    /// Decide a move depending on the AI type
+    pub fn decide_move(&self, state: &State, rng: &mut ThreadRng) -> (i32, i32) {
+        match &self {
+            AIType::Random | AIType::None => ai_random(state, rng),
+            AIType::NaiveDefensive => ai_naive_defensive(state, rng),
+            AIType::NaiveNeutral => ai_naive_neutral(state, rng),
+            AIType::NaiveAggressive => ai_naive_aggressive(state, rng),
+        }
+    }
+}
+
 /// Randomly pick a move
 pub fn ai_random(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
     *list_all_moves(state).choose(rng).unwrap()
