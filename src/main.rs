@@ -15,27 +15,27 @@ use clap::Parser;
 // Just a simple list of arguments for the `clap` library
 // `derive` and the `#[...]` are just macros
 #[derive(Parser, Debug)]
-#[clap(author, version, about, long_about = None)]
+#[command(author, version, about, long_about = None)]
 pub struct Args {
     /// Whether to run in debug mode
-    #[clap(short, long, value_parser, default_value_t = false)]
+    #[arg(short, long, default_value_t = false)]
     debug: bool,
 
     /// Whether to let red play first
-    #[clap(short, long, value_parser, default_value_t = false)]
+    #[arg(short, long, default_value_t = false)]
     reverse: bool,
 
     /// Use AI with the picked algorithm for red
-    #[clap(short, long, value_enum, default_value_t = AIType::None)]
+    #[arg(short, long, value_enum, default_value_t = AIType::None)]
     ai: AIType,
 
     /// Whether not to clean the screen after each input
     /// (always off in debug mode)
-    #[clap(short, long, value_parser, default_value_t = false)]
+    #[arg(short, long, default_value_t = false)]
     no_clean: bool,
 
     /// Whether to use time machine
-    #[clap(short, long, value_parser, default_value_t = false)]
+    #[arg(short, long, default_value_t = false)]
     time_machine: bool,
 }
 
