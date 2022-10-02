@@ -71,8 +71,8 @@ fn ai_naive_aggressive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
         // Avoid attacks if possible
         action
     } else {
-        // Pick randomly
-        *list_all_moves(state).choose(rng).unwrap()
+        // Randomly pick one based on distribution
+        pick_distribution_farthest(state, &all_moves, rng)
     }
 }
 
