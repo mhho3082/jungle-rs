@@ -45,6 +45,9 @@ fn ai_naive_defensive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
     if let Some(action) = pick_win(state, &all_moves, rng) {
         // Win if possible
         action
+    } else if let Some(action) = pick_safe_attack(state, &all_moves, rng) {
+        // Make safe attacks if possible
+        action
     } else if let Some(action) = pick_avoid_attack(state, &all_moves, rng) {
         // Avoid attacks if possible
         action
@@ -92,6 +95,45 @@ fn pick_win(
         })
         .collect();
     win_moves.choose(rng).map(|id| **id)
+}
+
+fn pick_safe_attack(
+    state: &State,
+    all_moves: &[(i32, i32)],
+    rng: &mut ThreadRng,
+) -> Option<(i32, i32)> {
+    // Create the world from opponent's eyes
+    let mut opposite_state = *state;
+    opposite_state.cur_blue ^= true;
+    let opposite_moves = list_all_moves(&opposite_state);
+
+    let attack_moves: Vec<&(i32, i32)> = all_moves
+        .iter()
+        .filter(|&(piece, move_to)| {
+            if !find_capture(state, *move_to) {
+                return false;
+            }
+            let mut safe = true;
+            for (enemy, their_move_to) in &opposite_moves {
+                if move_to == their_move_to {
+                    if enemy >= piece || (*enemy == 0 && *piece == 7) {
+                        safe = false;
+                        break;
+                    } else if state.cur_blue {
+                        if TRAPS_RED.contains(move_to) {
+                            safe = false;
+                            break;
+                        }
+                    } else if TRAPS_BLUE.contains(move_to) {
+                        safe = false;
+                        break;
+                    }
+                }
+            }
+            safe
+        })
+        .collect();
+    attack_moves.choose(rng).map(|id| **id)
 }
 
 fn pick_attack(
