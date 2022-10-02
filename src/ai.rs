@@ -152,11 +152,11 @@ fn pick_avoid_attack(
                         safe = false;
                         break;
                     } else if state.cur_blue {
-                        if TRAPS_BLUE.contains(move_to) {
+                        if TRAPS_RED.contains(move_to) {
                             safe = false;
                             break;
                         }
-                    } else if TRAPS_RED.contains(move_to) {
+                    } else if TRAPS_BLUE.contains(move_to) {
                         safe = false;
                         break;
                     }
