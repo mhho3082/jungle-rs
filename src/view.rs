@@ -299,7 +299,7 @@ fn accept_arrow(input: &str) -> Option<usize> {
 
 /// Prints the board
 /// Formats the pieces as R C D W O T L E
-pub fn print_board(
+fn print_board(
     board: &Board,
     step: usize,
     border: bool,

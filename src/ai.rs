@@ -34,12 +34,12 @@ impl AIType {
 }
 
 /// Randomly pick a move
-pub fn ai_random(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
+fn ai_random(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
     *list_all_moves(state).choose(rng).unwrap()
 }
 
 /// Can avoid attack if possible
-pub fn ai_naive_defensive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
+fn ai_naive_defensive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
     let all_moves = list_all_moves(state);
 
     if let Some(action) = pick_win(state, &all_moves, rng) {
@@ -58,7 +58,7 @@ pub fn ai_naive_defensive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
 }
 
 /// Doesn't avoid attacks, and will dash for the farthest move
-pub fn ai_naive_aggressive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
+fn ai_naive_aggressive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
     let all_moves = list_all_moves(state);
 
     if let Some(action) = pick_win(state, &all_moves, rng) {
