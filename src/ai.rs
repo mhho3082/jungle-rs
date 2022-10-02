@@ -38,8 +38,27 @@ fn ai_random(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
     *list_all_moves(state).choose(rng).unwrap()
 }
 
-/// Can avoid attack if possible
+/// Favours avoidance more than attacks
 fn ai_naive_defensive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
+    let all_moves = list_all_moves(state);
+
+    if let Some(action) = pick_win(state, &all_moves, rng) {
+        // Win if possible
+        action
+    } else if let Some(action) = pick_avoid_attack(state, &all_moves, rng) {
+        // Avoid attacks if possible
+        action
+    } else if let Some(action) = pick_attack(state, &all_moves, rng) {
+        // Attack if possible
+        action
+    } else {
+        // Randomly pick one based on distribution
+        pick_distribution_farthest(state, &all_moves, rng)
+    }
+}
+
+/// Favours attacks more than avoidance
+fn ai_naive_aggressive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
     let all_moves = list_all_moves(state);
 
     if let Some(action) = pick_win(state, &all_moves, rng) {
@@ -52,24 +71,8 @@ fn ai_naive_defensive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
         // Avoid attacks if possible
         action
     } else {
-        // Randomly pick one based on distribution
-        pick_distribution_farthest(state, &all_moves, rng)
-    }
-}
-
-/// Doesn't avoid attacks, and will dash for the farthest move
-fn ai_naive_aggressive(state: &State, rng: &mut ThreadRng) -> (i32, i32) {
-    let all_moves = list_all_moves(state);
-
-    if let Some(action) = pick_win(state, &all_moves, rng) {
-        // Win if possible
-        action
-    } else if let Some(action) = pick_attack(state, &all_moves, rng) {
-        // Attack if possible
-        action
-    } else {
-        // Pick from a farthest move
-        pick_farthest(state, &all_moves, rng)
+        // Pick randomly
+        *list_all_moves(state).choose(rng).unwrap()
     }
 }
 
@@ -163,42 +166,6 @@ fn pick_avoid_attack(
         })
         .collect();
     good_moves.choose(rng).map(|id| **id)
-}
-
-fn pick_farthest(
-    state: &State,
-    all_moves: &[(i32, i32)],
-    rng: &mut ThreadRng,
-) -> (i32, i32) {
-    if state.cur_blue {
-        // Find farthest move (blue)
-        let mut farthest: i32 = ROW_COUNT;
-        for (_, y) in all_moves {
-            if (y / COL_COUNT) < farthest {
-                farthest = y / COL_COUNT;
-            }
-        }
-        **all_moves
-            .iter()
-            .filter(|(_, y)| (y / COL_COUNT) == farthest)
-            .collect::<Vec<&(i32, i32)>>()
-            .choose(rng)
-            .unwrap()
-    } else {
-        // Find farthest move (red)
-        let mut farthest: i32 = 0;
-        for (_, y) in all_moves {
-            if (y / COL_COUNT) > farthest {
-                farthest = y / COL_COUNT;
-            }
-        }
-        **all_moves
-            .iter()
-            .filter(|(_, y)| (y / COL_COUNT) == farthest)
-            .collect::<Vec<&(i32, i32)>>()
-            .choose(rng)
-            .unwrap()
-    }
 }
 
 fn pick_distribution_farthest(
