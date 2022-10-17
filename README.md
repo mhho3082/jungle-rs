@@ -2,7 +2,8 @@
 
 <h1>jungle-rs</h1>
 
-_A simple Rust-based application for the Jungle board game_
+_A simple emulator for the Jungle board game,
+using Rust and the MVC pattern_
 
 ![screenshot](./screenshot.png)
 
@@ -10,7 +11,8 @@ _A simple Rust-based application for the Jungle board game_
 
 ## Quick start
 
-If you haven't installed Rust, please see below for a simple guide,
+If you haven't installed Rust, a programming language,
+please see below for a simple guide,
 or refer to the [official guide](https://www.rust-lang.org/tools/install).
 
 Clone this repository and run `jungle-rs`:
@@ -102,5 +104,14 @@ For Windows users, please refer to the
 
 ## References
 
-- Basic Rust usage:
-  [the Rust Book](https://doc.rust-lang.org/book/)
+This application is made in anticipation for a course project
+at the Polytechnic University of Hong Kong,
+referring to the COMP3211 project requirements;
+the actual project is written in Java instead.
+
+I have learnt basic Rust all on my own,
+referring to online guides such as
+[the Rust Book](https://doc.rust-lang.org/book/)
+and [the Cargo Book](https://doc.rust-lang.org/cargo/).
+I am currently continuing my journey to learn Rust,
+and exploring how I may use this amazing tool in various opportunities.
