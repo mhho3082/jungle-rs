@@ -105,7 +105,7 @@ For Windows users, please refer to the
 ## References
 
 This application is made in anticipation for a course project
-at the Polytechnic University of Hong Kong,
+at the Hong Kong Polytechnic University,
 referring to the COMP3211 project requirements;
 the actual project is written in Java instead.
 
