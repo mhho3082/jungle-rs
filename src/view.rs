@@ -167,7 +167,7 @@ pub fn cli(model: &mut Model, args: Args) {
                         break 'input;
                     }
                 } else {
-                    println!("Wrong input! Please try again.");
+                    println!("Invalid input! Please try again.");
                 }
             }
 
@@ -219,7 +219,7 @@ pub fn cli(model: &mut Model, args: Args) {
                             continue 'main;
                         }
                         Err(_) => {
-                            println!("Move illegal! Please try again.");
+                            println!("Move not rule-abiding! Please try again.");
                             continue 'input;
                         }
                     }
@@ -242,7 +242,7 @@ pub fn cli(model: &mut Model, args: Args) {
                         }
                     }
                 } else {
-                    println!("Wrong input! Please try again.");
+                    println!("Invalid input! Please try again.");
                     continue 'input;
                 }
             }
