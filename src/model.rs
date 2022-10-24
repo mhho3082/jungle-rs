@@ -86,14 +86,14 @@ impl Board {
 }
 
 // Static values for controller and more
-pub static RIVERS: [i32; 12] = [22, 23, 25, 26, 29, 30, 32, 33, 36, 37, 39, 40];
-pub static TRAPS_BLUE: [i32; 3] = [52, 58, 60];
-pub static TRAPS_RED: [i32; 3] = [2, 4, 10];
-pub static DEN_BLUE: i32 = 59;
-pub static DEN_RED: i32 = 3;
-pub static COL_COUNT: i32 = 7;
-pub static ROW_COUNT: i32 = 9;
-pub static RIVER_MOVES: [[i32; 2]; 10] = [
+pub const RIVERS: [i32; 12] = [22, 23, 25, 26, 29, 30, 32, 33, 36, 37, 39, 40];
+pub const TRAPS_BLUE: [i32; 3] = [52, 58, 60];
+pub const TRAPS_RED: [i32; 3] = [2, 4, 10];
+pub const DEN_BLUE: i32 = 59;
+pub const DEN_RED: i32 = 3;
+pub const COL_COUNT: i32 = 7;
+pub const ROW_COUNT: i32 = 9;
+pub const RIVER_MOVES: [[i32; 2]; 10] = [
     [15, 43],
     [16, 44],
     [18, 46],
@@ -105,7 +105,7 @@ pub static RIVER_MOVES: [[i32; 2]; 10] = [
     [31, 34],
     [38, 41],
 ];
-pub static RIVER_LEAPS: [[i32; 3]; 10] = [
+pub const RIVER_LEAPS: [[i32; 3]; 10] = [
     [22, 29, 36],
     [23, 30, 37],
     [25, 32, 39],
