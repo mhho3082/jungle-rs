@@ -1,9 +1,9 @@
 [package]
 name = "jungle-rs"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [dependencies]
-clap = { version = "4.0", features = ["derive"] }
-colored = "2.0"
-rand = "0.8"
+clap = { version = "4.1", features = ["derive"] }
+colored = "3"
+rand = "0.10"

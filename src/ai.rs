@@ -6,8 +6,8 @@ use crate::{
 };
 
 use rand::{
-    distributions::WeightedIndex, prelude::Distribution, rngs::ThreadRng,
-    seq::SliceRandom,
+    distr::weighted::WeightedIndex, distr::Distribution, rngs::ThreadRng,
+    seq::IndexedRandom,
 };
 
 #[derive(clap::ValueEnum, Clone, Debug, PartialEq, Eq)]
@@ -219,7 +219,7 @@ fn pick_distribution_farthest(
         // Generate distribution
         let dist_base = all_moves
             .iter()
-            .map(|(_, y)| (ROW_COUNT - (y / COL_COUNT)))
+            .map(|(_, y)| ROW_COUNT - (y / COL_COUNT))
             .collect::<Vec<i32>>();
         let dist = WeightedIndex::new(&dist_base).unwrap();
 

@@ -1,7 +1,7 @@
 use crate::{ai::*, controller::*, model::*, Args};
 
 use colored::Colorize;
-use rand::thread_rng;
+use rand::rng;
 use std::io;
 
 // The clean-screen print copied from
@@ -28,7 +28,7 @@ pub fn cli(model: &mut Model, args: Args) {
     }
 
     // Prepare RNG for AI
-    let mut rng = thread_rng();
+    let mut rng = rng();
 
     'main: loop {
         if model.curr().won {
